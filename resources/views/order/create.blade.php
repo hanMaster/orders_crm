@@ -3,11 +3,28 @@
 @section('content')
     <h3 class="text-center">Создание заявки</h3>
 
-    <p>Объект: <strong>{{$order->bo->name??''}}</strong></p>
+    <div class="d-flex justify-content-between align-items-center">
+        <p style="margin: 0;">Объект: <strong>{{$order->bo->name??''}}</strong></p>
+        <form action="{{route('order.store')}}" method="POST">
+            @method('PUT')
+            @csrf
+            <input type="hidden" name="order_id" value="{{$order->id}}">
+            <button
+                type="submit"
+                class="btn btn-primary" @if(count($order->items)<1) disabled @endif
+
+            >Закончить редактирование</button>
+        </form>
+    </div>
+
+    <hr>
 
 
     @if(!$order->object_id)
-        <form action="{{url('order/'.$order->id.'/set-object')}}" method="POST">
+        <form
+            action="{{url('order/'.$order->id.'/set-object')}}"
+            method="POST"
+        >
             @method('PATCH')
             @csrf
             <select name="object_id" class="form-control">
@@ -20,45 +37,78 @@
         </form>
     @else
         <div class="row">
-            <div class="col-9">
+            <div class="col-12">
                 <form action="{{route('order.addItemCreate')}}" method="POST">
                     @csrf
-                    <table class="table table-striped table-bordered">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th style="width: 50px;">№</th>
-                            <th>Наименование</th>
-                            <th style="width: 100px;">Ед. изм.</th>
-                            <th style="width: 100px;">Кол-во</th>
-                            <th style="width: 140px;">Дата поставки</th>
-                        </tr>
-                        </thead>
 
-                        <tbody>
-                        <tr>
-                            <td style="padding: 0;"></td>
-                            <td style="padding: 0;">
-                                <input class="form-control" type="text" name="item" value="{{old('item')}}">
-                            </td>
-                            <td style="padding: 0;">
-                                <select class="form-control" name="ed_id" >
+                    <div class="form-group">
+                        <label for="Input_item">Наименование</label>
+                        <input
+                            type="text"
+                            name="item"
+                            value="{{old('item')}}"
+                            class="form-control"
+                            id="Input_item"
+                            placeholder="Название материала"
+                        >
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="select_ed">Ед.изм.</label>
+                                <select class="form-control" name="ed_id" id="select_ed">
                                     @foreach($eds as $ed)
-                                    <option value="{{$ed->id}}">{{$ed->name}}</option>
+                                        <option value="{{$ed->id}}">{{$ed->name}}</option>
                                     @endforeach
                                 </select>
-                            </td>
-                            <td style="padding: 0;">
-                                <input class="form-control" type="number" value="1" name="quantity">
-                            </td>
-                            <td style="padding: 0;">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="Input_quantity">Кол-во</label>
+                                <input
+                                    type="number"
+                                    name="quantity"
+                                    value="{{old('quantity')}}"
+                                    class="form-control"
+                                    id="Input_quantity"
+                                    value='1'
+                                >
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="Input_date">Дата доставки</label>
                                 <input
                                     class="form-control"
                                     type="text"
                                     value="{{date("d.m.Y", mktime(0, 0, 0, date('m'), date('d')+3, date('Y')))}}"
                                     name="delivery_date"
+                                    id="Input_date"
                                 >
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
+
+                    </div>
+                    <input type="file" name="attached_file" >
+
+                    <input type="hidden" name="order_id" value="{{$order->id}}">
+                    <button class="btn btn-success btn-block mt-3" type="submit" >Добавить строку</button>
+                </form>
+                <hr>
+
+                <table class="table table-striped table-bordered mt-4">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th style="width: 50px;">№</th>
+                        <th>Наименование</th>
+                        <th style="width: 100px;">Ед. изм.</th>
+                        <th style="width: 100px;">Кол-во</th>
+                        <th style="width: 140px;">Дата поставки</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
                         @if(isset($order->items))
                             @foreach($order->items as $i)
                                 <tr>
@@ -70,30 +120,11 @@
                                 </tr>
                             @endforeach
                         @endif
-                        </tbody>
-                    </table>
-                    <input type="hidden" name="order_id" value="{{$order->id}}">
-                    <button class="btn btn-outline-secondary" type="submit" >Добавить строку</button>
-                </form>
-            </div>
-            <div class="col-3">
-                <div class="card">
-                    <div class="card-header">Действия</div>
-                    <div class="card-body">
-                        <form action="{{route('order.store')}}" method="POST" class="mt-3">
-                            @method('PUT')
-                            @csrf
-                            <input type="hidden" name="order_id" value="{{$order->id}}">
-                            <button
-                                type="submit"
-                                class="btn btn-primary" @if(count($order->items)<1) disabled @endif
-
-                            >Закончить редактирование</button>
-                        </form>
-                    </div>
-                </div>
+                    </tbody>
+                </table>
 
             </div>
+
         </div>
 
     @endif
