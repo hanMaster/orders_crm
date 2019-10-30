@@ -1,0 +1,52 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: #494f54;
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+.comment-box {
+    border: 1px solid #6c757d;;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    strong, span{
+        display: block;
+    }
+    span {
+        color: #6c757d;
+        font-size: 0.7rem;
+    }
+}
+
+.list-group-item {
+    &:hover {
+        background-color: #c7d8e6;
+    }
+}
+
+.align-right{
+    float: right;
+}
+
+.table {
+    table-layout: fixed;
+}
+
+.form-control {
+    border-radius: 0;
+}
