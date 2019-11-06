@@ -35,6 +35,10 @@ Route::get('approve/{order}', 'OrderController@startApprove')->middleware('auth'
 Route::put('approve/{order}', 'OrderController@makeApprove')->middleware('auth');
 
 
-//execution
+//Assign executor
 Route::get('exec/{order}/assign', 'ExecutionController@assign')->middleware('auth');
 Route::patch('exec/{order}', 'ExecutionController@assignStore')->middleware('auth');
+
+//executors
+Route::get('execute/{order}', 'ExecutionController@execute')->middleware('auth');
+Route::patch('execute/{order}', 'ExecutionController@updateExecution')->middleware('auth');

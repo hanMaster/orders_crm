@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BuildObject;
 use App\Order;
+use App\OrderDetail;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\Config;
@@ -47,7 +48,10 @@ class HomeController extends Controller
                 return view('interfaces.mainExecutor.index', compact('orders'));
 
             case Config::get('role.executor'):
-                return view('interfaces.executor.index');
+                $orders = Order::whereIn('id', OrderDetail::select('order_id')->where('executor_id', \auth()->id()))
+                    ->orderBy('updated_at', 'desc')->get();
+
+                return view('interfaces.executor.index', compact('orders'));
 
             case Config::get('role.admin'):
                 $users = User::all();

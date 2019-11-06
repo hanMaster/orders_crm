@@ -34,4 +34,8 @@ class ExecutionController extends Controller
         return redirect('exec/'.$order->id.'/assign')->with("error", "Не выбран ни один пункт заявки");
 
     }
+
+    public function execute(Order $order){
+        return view('interfaces.executor.execute', compact('order'));
+    }
 }

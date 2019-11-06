@@ -34,12 +34,14 @@
                         <td>
                             {{$item->order_item}}
                             @include('layouts.include.attach')
+                            @include('layouts.include.logs')
 
                         </td>
                         <td>{{$item->ed->name}}</td>
                         <td>{{$item->quantity}}</td>
                         <td>{{$item->delivery_date}}</td>
                         <td>{{$item->executor->name?? 'Не назначен'}}</td>
+
                     </tr>
                 @endforeach
                 </tbody>

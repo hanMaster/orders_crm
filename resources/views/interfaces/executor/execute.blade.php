@@ -7,10 +7,13 @@
         <h4><span style="color: #ED5565">Статус: </span>{{$order->status->name}}</h4>
     </div>
 
-    <div class="header d-flex justify-content-between">
-        <p>Объект: {{$order->bo->name}}</p>
-        <a href="{{url("order/".$order->id."/edit")}}">Редактировать заявку</a>
+    <div class="info d-flex justify-content-between">
+        <p>Объект: {{$order->bo->name??''}}</p>
+        @if ($order->executor)
+            <p style="color: #227dc7;">Исполнитель: {{$order->executor->name}}</p>
+        @endif
     </div>
+
 
     <table class="table table-striped table-bordered">
         <thead class="thead-dark">
@@ -28,22 +31,24 @@
         @foreach ($order->items as $item)
             <tr>
                 <td>{{$item->idx}}</td>
+
                 <td>
                     {{$item->order_item}}
                     @include('layouts.include.attach')
                 </td>
+
                 <td>{{$item->ed->name}}</td>
                 <td>{{$item->quantity}}</td>
                 <td>{{$item->delivery_date}}</td>
-                <td>{{$item->executor ?? 'не назначен'}}</td>
+                <td>{{$item->executor->name ?? 'не назначен'}}</td>
             </tr>
         @endforeach
         </tbody>
     </table>
 
-    <div class="card mt-5">
+    <div class="card">
         <div class="card-header d-flex justify-content-between">
-            Комментарии
+            Комментарии <a href="{{url('order/'. $order->id . '/comments/create')}}">Добавить</a>
         </div>
         <div class="card-body">
             @foreach($order->comments as $comment)
@@ -57,22 +62,18 @@
         </div>
     </div>
 
-    <div class="card mt-5">
-        <div class="card-header">Согласование</div>
-        <div class="card-body">
-            <form action="{{url('approve/'. $order->id)}}" method="POST">
-                @method('PUT')
-                @csrf
-                <input type="hidden" name="approved" value="off">
-                <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="customSwitch1" name="approved">
-                    <label class="custom-control-label" for="customSwitch1">Согласовано</label>
-                </div>
-                <textarea name="comment" cols="30" rows="5" class="form-control mt-4 mb-4"></textarea>
-                <button type="submit" class="btn btn-primary">Отправить</button>
-            </form>
-        </div>
-    </div>
+    @if (($order->status_id == Config::get('status.not_approved') || $order->status_id == Config::get('status.new'))
+        && \Illuminate\Support\Facades\Auth::user()->role_id == Config::get('roles.starter'))
+
+        <form action="{{url('order/'.$order->id.'/reapprove')}}" method="POST" class="mt-3">
+            @method('PUT')
+            @csrf
+            <a href="{{url('order/'.$order->id.'/edit')}}" class="btn btn-primary">Редактировать заявку</a>
+            @if ($order->status_id == Config::get('status.not_approved'))
+                <button type="submit" class="btn btn-success">На согласование</button>
+            @endif
+
+        </form>
+    @endif
 
 @endsection
-

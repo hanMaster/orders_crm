@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BuildObject;
 use App\Ed;
+use App\Log;
 use App\Order;
 use App\OrderComment;
 use App\OrderDetail;
@@ -44,7 +45,6 @@ class OrderController extends Controller
 
 
     public function addItemFromCreate(Request $request){
-//        return $request;
         $request->validate([
             'item' => 'required',
             'quantity' => 'required|numeric|gt:0',
@@ -57,13 +57,20 @@ class OrderController extends Controller
             $filePath = $request->attached_file->store('orders', 'public');
         }
 
-        OrderDetail::create([
+        $od = OrderDetail::create([
             'order_item'=>$request->item,
             'order_id'=>$request->order_id,
             'ed_id' => $request->ed_id,
             'quantity' => $request->quantity,
             'delivery_date' => $request->delivery_date,
             'attached_file' => $filePath
+        ]);
+
+        Log::create([
+            'order_details_id' => $od->id,
+            'user_id' => Auth::id(),
+            'message' => "Создание"
+
         ]);
 
         return $this->create();
@@ -82,13 +89,19 @@ class OrderController extends Controller
             $filePath = $request->attached_file->store('orders', 'public');
         }
 
-        OrderDetail::create([
+        $od = OrderDetail::create([
             'order_item'=>$request->item,
             'order_id'=>$order->id,
             'ed_id' => $request->ed_id,
             'quantity' => $request->quantity,
             'delivery_date' => $request->delivery_date,
             'attached_file' => $filePath
+        ]);
+        Log::create([
+            'order_details_id' => $od->id,
+            'user_id' => Auth::id(),
+            'message' => "Создание"
+
         ]);
         return $this->edit($order);
     }
@@ -211,6 +224,13 @@ class OrderController extends Controller
         $item->delivery_date = $request->delivery_date;
         $item->attached_file = $filePath;
         $item->save();
+
+        Log::create([
+            'order_details_id' => $item->id,
+            'user_id' => Auth::id(),
+            'message' => "Изменение"
+
+        ]);
 
         return $this->edit($order);
     }

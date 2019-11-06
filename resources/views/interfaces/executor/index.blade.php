@@ -5,16 +5,22 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Dashboard for EXECUTOR</div>
+                    <div class="card-header">Текущие заявки</div>
 
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
+
+                        @if (isset($orders))
+                            <ol>
+                                @foreach($orders as $order)
+                                    <li>
+                                        <a href="{{url("execute/". $order->id )}}">
+                                            {{$order->bo->name}} - заявка от {{$order->created_at}} - статус: {{$order->status->name}}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ol>
                         @endif
 
-                        You are logged in!
                     </div>
                 </div>
             </div>

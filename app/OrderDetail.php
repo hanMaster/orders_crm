@@ -21,4 +21,8 @@ class OrderDetail extends Model
     public function executor(){
         return $this->belongsTo(User::class, 'executor_id');
     }
+
+    public function logs(){
+        return $this->hasMany(Log::class, 'order_details_id');
+    }
 }
