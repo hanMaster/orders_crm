@@ -38,7 +38,7 @@
     @else
         <div class="row">
             <div class="col-12">
-                <form action="{{route('order.addItemCreate')}}" method="POST">
+                <form action="{{route('order.addItemCreate')}}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-group">
@@ -110,13 +110,16 @@
 
                     <tbody>
                         @if(isset($order->items))
-                            @foreach($order->items as $i)
+                            @foreach($order->items as $item)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$i->order_item}}</td>
-                                    <td>{{$i->ed->name}}</td>
-                                    <td>{{$i->quantity}}</td>
-                                    <td>{{$i->delivery_date}}</td>
+                                    <td>
+                                        {{$item->order_item}}
+                                        @include('layouts.include.attach')
+                                    </td>
+                                    <td>{{$item->ed->name}}</td>
+                                    <td>{{$item->quantity}}</td>
+                                    <td>{{$item->delivery_date}}</td>
                                 </tr>
                             @endforeach
                         @endif
@@ -128,12 +131,5 @@
         </div>
 
     @endif
-
-
-
-
-
-
-
 
 @endsection

@@ -16,6 +16,11 @@ Route::patch('order/{order}/set-object', 'OrderController@setObject')->middlewar
 
 Route::put('order/{order}/edit', 'OrderController@addItemFromEdit')->middleware('auth')->name('order.addItemEdit');
 Route::get('order/{order}/edit', 'OrderController@edit')->middleware('auth')->name('order.edit');
+Route::get('order/{order}/edit/createItem', 'OrderController@createItem')->middleware('auth')->name('order.addItemFromEdit');
+
+Route::get('order/{order}/edit/{item}/editItem', 'OrderController@editItem')->middleware('auth')->name('order.editItemFromEdit');
+Route::put('order/{order}/edit/{item}', 'OrderController@updateItem')->middleware('auth')->name('order.updateItemFromEdit');
+
 Route::put('order', 'OrderController@store')->middleware('auth')->name('order.store');
 Route::get('order/{order}', 'OrderController@show')->middleware('auth')->name('order.show');
 Route::get('order/{order}/comments/create', 'OrderController@addComment')->middleware('auth')->name('order.addComment');

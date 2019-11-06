@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\BuildObject;
 use App\Order;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\Config;
@@ -37,13 +36,13 @@ class HomeController extends Controller
             case Config::get('role.approve'):
 
                 $orders = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', \auth()->id()))
-                    ->whereIn('status_id', [Config::get('status.new'),Config::get('status.re_approve')])
+                    ->whereIn('status_id', [Config::get('status.new'),Config::get('status.re_approve'), Config::get('status.approve_in_process')])
                     ->orderBy('updated_at', 'desc')->get();
 
                 return view('interfaces.approve.index', compact('orders'));
 
             case Config::get('role.main_executor'):
-                $orders = Order::whereIn('status_id', [Config::get('status.approved'),Config::get('status.executor')])
+                $orders = Order::whereNotIn('status_id', [Config::get('status.edit')])
                     ->orderBy('updated_at', 'desc')->get();
                 return view('interfaces.mainExecutor.index', compact('orders'));
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use App\Services\Numerator;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -47,34 +48,47 @@ class OrderController extends Controller
         $request->validate([
             'item' => 'required',
             'quantity' => 'required|numeric|gt:0',
-            'ed_id' => 'required|numeric|gt:0'
+            'ed_id' => 'required|numeric|gt:0',
+            'attached_file' => 'image|max:1000'
         ]);
+
+        $filePath = null;
+        if ($request->hasFile('attached_file')){
+            $filePath = $request->attached_file->store('orders', 'public');
+        }
 
         OrderDetail::create([
             'order_item'=>$request->item,
             'order_id'=>$request->order_id,
             'ed_id' => $request->ed_id,
             'quantity' => $request->quantity,
-            'delivery_date' => $request->delivery_date
+            'delivery_date' => $request->delivery_date,
+            'attached_file' => $filePath
         ]);
 
         return $this->create();
     }
 
     public function addItemFromEdit(Request $request, Order $order){
-//return $request;
         $request->validate([
             'item' => 'required',
             'order_id' => 'required|numeric',
             'quantity' => 'required|gt:0',
+            'attached_file' => 'image|max:1000'
         ]);
+
+        $filePath = null;
+        if ($request->hasFile('attached_file')){
+            $filePath = $request->attached_file->store('orders', 'public');
+        }
 
         OrderDetail::create([
             'order_item'=>$request->item,
             'order_id'=>$order->id,
             'ed_id' => $request->ed_id,
             'quantity' => $request->quantity,
-            'delivery_date' => $request->delivery_date
+            'delivery_date' => $request->delivery_date,
+            'attached_file' => $filePath
         ]);
         return $this->edit($order);
     }
@@ -107,9 +121,8 @@ class OrderController extends Controller
     }
 
     public function edit(Order $order){
-        $objs = BuildObject::all();
         $eds = Ed::all();
-        return view('order.edit', compact(['order', 'objs', 'eds']));
+        return view('order.edit', compact(['order', 'eds']));
     }
 
     public function show(Order $order){
@@ -162,8 +175,45 @@ class OrderController extends Controller
     }
 
     public function destroyItem(OrderDetail $item, Request $request){
+        if ($item->attached_file) {
+            Storage::delete("/public/".$item->attached_file);
+        }
         $item->delete();
         return redirect(url('/order/'.$request->order_id.'/edit'));
     }
+
+
+    public function createItem(Order $order){
+        $eds = Ed::all();
+        return view('order.createItem', compact(['order', 'eds']));
+    }
+
+    public function editItem(Order $order, OrderDetail $item){
+        $eds = Ed::all();
+        return view('order.editItem', compact(['order','item', 'eds']));
+    }
+
+    public function updateItem(Order $order, OrderDetail $item, Request $request){
+        $request->validate([
+            'item' => 'required',
+            'quantity' => 'required|gt:0',
+            'attached_file' => 'image|max:1000'
+        ]);
+
+        $filePath = null;
+        if ($request->hasFile('attached_file')){
+            Storage::delete("/public/".$item->attached_file);
+            $filePath = $request->attached_file->store('orders', 'public');
+        }
+        $item->order_item = $request->item;
+        $item->ed_id = $request->ed_id;
+        $item->quantity = $request->quantity;
+        $item->delivery_date = $request->delivery_date;
+        $item->attached_file = $filePath;
+        $item->save();
+
+        return $this->edit($order);
+    }
+
 
 }

@@ -31,7 +31,12 @@
         @foreach ($order->items as $item)
             <tr>
                 <td>{{$item->idx}}</td>
-                <td>{{$item->order_item}}</td>
+
+                <td>
+                    {{$item->order_item}}
+                    @include('layouts.include.attach')
+                </td>
+
                 <td>{{$item->ed->name}}</td>
                 <td>{{$item->quantity}}</td>
                 <td>{{$item->delivery_date}}</td>
@@ -47,28 +52,28 @@
         </div>
         <div class="card-body">
             @foreach($order->comments as $comment)
-            <div class="comment-box">
-                <strong>{{$comment->user->name}}</strong>
-                {{$comment->comment}}
-                <span>{{$comment->created_at}}</span>
-            </div>
+                <div class="comment-box">
+                    <strong>{{$comment->user->name}}</strong>
+                    {{$comment->comment}}
+                    <span>{{$comment->created_at}}</span>
+                </div>
             @endforeach
 
         </div>
     </div>
 
-    @if ($order->status_id == \Illuminate\Support\Facades\Config::get('status.not_approved') || $order->status_id == \Illuminate\Support\Facades\Config::get('status.new'))
+    @if (($order->status_id == Config::get('status.not_approved') || $order->status_id == Config::get('status.new'))
+        && \Illuminate\Support\Facades\Auth::user()->role_id == Config::get('roles.starter'))
 
         <form action="{{url('order/'.$order->id.'/reapprove')}}" method="POST" class="mt-3">
             @method('PUT')
             @csrf
             <a href="{{url('order/'.$order->id.'/edit')}}" class="btn btn-primary">Редактировать заявку</a>
-            @if ($order->status_id == \Illuminate\Support\Facades\Config::get('status.not_approved'))
+            @if ($order->status_id == Config::get('status.not_approved'))
                 <button type="submit" class="btn btn-success">На согласование</button>
             @endif
 
-    </form>
-
-@endif
+        </form>
+    @endif
 
 @endsection

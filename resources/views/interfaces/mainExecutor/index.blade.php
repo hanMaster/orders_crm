@@ -12,7 +12,11 @@
                             <ol>
                                 @foreach($orders as $order)
                                     <li>
-                                        <a href="{{url("exec/". $order->id . '/assign')}}">
+                                        @if($order->status_id === Config::get('status.approved'))
+                                            <a href="{{url("exec/". $order->id . '/assign')}}">
+                                        @else
+                                            <a href="{{url("order/". $order->id )}}">
+                                        @endif
                                             {{$order->bo->name}} - заявка от {{$order->created_at}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>

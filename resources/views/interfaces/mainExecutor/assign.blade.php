@@ -31,7 +31,11 @@
                 @foreach ($order->items as $item)
                     <tr>
                         <td>{{$item->idx}} <input type="checkbox" name="{{'items['.$item->id.']'}}"></td>
-                        <td>{{$item->order_item}}</td>
+                        <td>
+                            {{$item->order_item}}
+                            @include('layouts.include.attach')
+
+                        </td>
                         <td>{{$item->ed->name}}</td>
                         <td>{{$item->quantity}}</td>
                         <td>{{$item->delivery_date}}</td>
@@ -77,8 +81,6 @@
         </div>
     </div>
     </form>
-
-
 
 @endsection
 

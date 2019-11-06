@@ -14,71 +14,30 @@
             <th style="width: 100px;">Ед. изм.</th>
             <th style="width: 100px;">Кол-во</th>
             <th style="width: 140px;">Дата поставки</th>
-            <th style="width: 100px;">Действие</th>
+            <th style="width: 220px;">Действие</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr>
-            <td colspan="6" style="padding: 0;">
-                <form action="{{url('order/'.$order->id. '/edit')}}" method="POST">
-                    @method('PUT')
-                    @csrf
-                    <input type="hidden" name="order_id" value="{{$order->id}}">
-                <table class="table table-striped table-bordered">
-                    <tbody>
-                    <tr>
-                        <td style="width: 50px; padding: 0;"></td>
-                        <td style="padding: 0; width: 100%;">
-                            <input class="form-control" type="text" name="item" value="{{old('item')}}">
-                        </td>
-                        <td style="padding: 0; width: 100px;">
-                            <select class="form-control" name="ed_id" >
-                                @foreach($eds as $ed)
-                                    <option value="{{$ed->id}}">{{$ed->name}}</option>
-                                @endforeach
-                            </select>
-                        </td>
-                        <td style="padding: 0; width: 100px;">
-                            <input class="form-control" type="number" value="1" name="quantity">
-                        </td>
-                        <td style="padding: 0; width: 140px;">
-                            <input
-                                class="form-control"
-                                type="text"
-                                value="{{date("d.m.Y", mktime(0, 0, 0, date('m'), date('d')+3, date('Y')))}}"
-                                name="delivery_date"
-                            >
-                        </td>
-                        <td style="padding: 0; vertical-align: middle; text-align: center;  width: 100px;">
-                            <button class="btn btn-outline-primary" type="submit">Добавить</button>
-
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                </form>
-            </td>
-
-
-
-
-        </tr>
 
         @if(isset($order->items))
-            @foreach($order->items as $i)
+            @foreach($order->items as $item)
                 <tr>
                     <td>{{$loop->iteration}}</td>
-                    <td>{{$i->order_item}}</td>
-                    <td>{{$i->ed->name}}</td>
-                    <td>{{$i->quantity}}</td>
-                    <td>{{$i->delivery_date}}</td>
+                    <td>
+                        {{$item->order_item}}
+                        @include('layouts.include.attach')
+                    </td>
+                    <td>{{$item->ed->name}}</td>
+                    <td>{{$item->quantity}}</td>
+                    <td>{{$item->delivery_date}}</td>
                     <td style="padding: 0; vertical-align: middle; text-align: center; ">
                         <form onsubmit="if(confirm('Удалить?')) {return true} else {return false}"
-                              action="{{url('/order/items/'.$i->id)}}" method="POST">
+                              action="{{url('/order/items/'.$item->id)}}" method="POST">
                             @method('delete')
                             @csrf
                             <input type="hidden" name="order_id" value="{{$order->id}}">
+                            <a class="btn btn-outline-secondary" href="{{route('order.editItemFromEdit',['order' => $order, 'item' => $item])}}">Редактировать</a>
                             <button type="submit" class="btn btn-outline-danger">Удалить</button>
                         </form>
                     </td>
@@ -88,13 +47,17 @@
         </tbody>
     </table>
 
+    <div class="d-flex justify-content-between">
+        <a href="{{route('order.addItemFromEdit', ['order'=>$order->id])}}" class="btn btn-success">Добавить строку</a>
+        <form action="{{route('order.store')}}" method="POST">
+            @method('PUT')
+            @csrf
+            <input type="hidden" name="order_id" value="{{$order->id}}">
+            <button type="submit" class="btn btn-primary">Закончить редактирование</button>
+        </form>
+    </div>
 
-    <form action="{{route('order.store')}}" method="POST" class="mt-3">
-        @method('PUT')
-        @csrf
-        <input type="hidden" name="order_id" value="{{$order->id}}">
-        <button type="submit" class="btn btn-primary">Закончить редактирование</button>
-    </form>
+
 
 
 @endsection

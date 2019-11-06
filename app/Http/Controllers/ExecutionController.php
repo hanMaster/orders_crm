@@ -18,20 +18,20 @@ class ExecutionController extends Controller
 
     public function assignStore(Order $order, Request $request){
 
-//        return $request;
-
         $items = $request->items;
-
-        foreach ($items as $index => $item) {
-            $item = OrderDetail::where('id', $index)->first();
-            if ($item){
-                $item->executor_id = $request->executor;
-                $item->save();
+        if (isset($items)){
+            foreach ($items as $index => $item) {
+                $item = OrderDetail::where('id', $index)->first();
+                if ($item){
+                    $item->executor_id = $request->executor;
+                    $item->save();
+                }
             }
+            $order->status_id = Config::get('status.executor');
+            $order->save();
+            return redirect('exec/'.$order->id.'/assign');
         }
-        $order->status_id = Config::get('status.executor');
-        $order->save();
+        return redirect('exec/'.$order->id.'/assign')->with("error", "Не выбран ни один пункт заявки");
 
-        return redirect('exec/'.$order->id.'/assign');
     }
 }
