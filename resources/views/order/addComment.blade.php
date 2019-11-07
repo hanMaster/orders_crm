@@ -12,7 +12,7 @@
 
         <div class="actions">
             <input class="btn btn-success" type="submit" value="Сохранить">
-            <a href="/" class="btn btn-light">Отмена</a>
+            <a href="{{URL::previous()}}" class="btn btn-light">Отмена</a>
         </div>
     </form>
 

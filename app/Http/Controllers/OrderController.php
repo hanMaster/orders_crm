@@ -156,7 +156,11 @@ class OrderController extends Controller
         $comment->user_id = Auth::user()->id;
         $comment->comment = $request->comment;
         $comment->save();
+        if (Auth::user()->role_id === Config::get('role.executor')){
+            return redirect('/execute/'. $order->id);
+        }
         return redirect('/order/'. $order->id);
+
     }
 
     public function startApprove(Order $order){
@@ -213,16 +217,16 @@ class OrderController extends Controller
             'attached_file' => 'image|max:1000'
         ]);
 
-        $filePath = null;
         if ($request->hasFile('attached_file')){
             Storage::delete("/public/".$item->attached_file);
-            $filePath = $request->attached_file->store('orders', 'public');
+            $item->attached_file = $request->attached_file->store('orders', 'public');
         }
+
+
         $item->order_item = $request->item;
         $item->ed_id = $request->ed_id;
         $item->quantity = $request->quantity;
         $item->delivery_date = $request->delivery_date;
-        $item->attached_file = $filePath;
         $item->save();
 
         Log::create([

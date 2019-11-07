@@ -29,8 +29,17 @@
                 </thead>
                 <tbody>
                 @foreach ($order->items as $item)
-                    <tr>
-                        <td>{{$item->idx}} <input type="checkbox" name="{{'items['.$item->id.']'}}"></td>
+                    <tr
+                        @if($item->done)
+                        style="text-decoration: line-through;"
+                        @endif
+                    >
+                        <td>
+                            {{$item->idx}}
+                            @if(!$item->done)
+                                <input type="checkbox" name="{{'items['.$item->id.']'}}">
+                            @endif
+                        </td>
                         <td>
                             {{$item->order_item}}
                             @include('layouts.include.attach')

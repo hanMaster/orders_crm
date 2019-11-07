@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => \Illuminate\Support\Facades\Config::get('role.admin')
         ]);
         User::create([
-                'name' => 'Шестаков Владимир',
+                'name' => 'Григорашенко Игорь',
                 'email' => '1@2.com',
                 'email_verified_at' => now(),
                 'password' => bcrypt('1qaz2wsx'), // password

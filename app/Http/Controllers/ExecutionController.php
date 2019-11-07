@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Log;
 use App\Order;
 use App\OrderDetail;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
 class ExecutionController extends Controller
@@ -37,5 +39,17 @@ class ExecutionController extends Controller
 
     public function execute(Order $order){
         return view('interfaces.executor.execute', compact('order'));
+    }
+
+    public function executeItem(OrderDetail $item){
+        $item->done = true;
+        $item->save();
+        Log::create([
+            'order_details_id' => $item->id,
+            'user_id' => Auth::id(),
+            'message' => "Исполнил"
+
+        ]);
+        return back();
     }
 }

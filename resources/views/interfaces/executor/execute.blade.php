@@ -23,12 +23,12 @@
             <th style="width: 100px;">Ед. изм.</th>
             <th style="width: 100px;">Кол-во</th>
             <th style="width: 150px;">Дата поставки</th>
-            <th style="width: 220px;">Исполнитель</th>
+            <th style="width: 100px;">Статус</th>
 
         </tr>
         </thead>
         <tbody>
-        @foreach ($order->items as $item)
+        @foreach ($order->execItems as $item)
             <tr>
                 <td>{{$item->idx}}</td>
 
@@ -40,7 +40,18 @@
                 <td>{{$item->ed->name}}</td>
                 <td>{{$item->quantity}}</td>
                 <td>{{$item->delivery_date}}</td>
-                <td>{{$item->executor->name ?? 'не назначен'}}</td>
+                <td style="padding: 0;text-align: center; vertical-align: middle;">
+                    @if($item->done)
+                        Исполнено
+                    @else
+                    <form onsubmit="if(confirm('Подтвердите изменение статуса!')) {return true} else {return false}"
+                          action="{{url('/execute/'.$item->id)}}" method="POST">
+                        @method('patch')
+                        @csrf
+                        <button type="submit" class="btn btn-outline-success">Исполнено</button>
+                    </form>
+                    @endif
+                </td>
             </tr>
         @endforeach
         </tbody>
@@ -61,19 +72,5 @@
 
         </div>
     </div>
-
-    @if (($order->status_id == Config::get('status.not_approved') || $order->status_id == Config::get('status.new'))
-        && \Illuminate\Support\Facades\Auth::user()->role_id == Config::get('roles.starter'))
-
-        <form action="{{url('order/'.$order->id.'/reapprove')}}" method="POST" class="mt-3">
-            @method('PUT')
-            @csrf
-            <a href="{{url('order/'.$order->id.'/edit')}}" class="btn btn-primary">Редактировать заявку</a>
-            @if ($order->status_id == Config::get('status.not_approved'))
-                <button type="submit" class="btn btn-success">На согласование</button>
-            @endif
-
-        </form>
-    @endif
 
 @endsection

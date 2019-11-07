@@ -29,7 +29,11 @@
         </thead>
         <tbody>
         @foreach ($order->items as $item)
-            <tr>
+            <tr
+                @if($item->done)
+                style="text-decoration: line-through;"
+                @endif
+            >
                 <td>{{$item->idx}}</td>
 
                 <td>
@@ -62,8 +66,11 @@
         </div>
     </div>
 
-    @if (($order->status_id == Config::get('status.not_approved') || $order->status_id == Config::get('status.new'))
-        && \Illuminate\Support\Facades\Auth::user()->role_id == Config::get('roles.starter'))
+
+
+    @if (auth()->user()->role_id == \Illuminate\Support\Facades\Config::get('role.starter')
+            && ($order->status_id == \Illuminate\Support\Facades\Config::get('status.not_approved') ||
+            $order->status_id == \Illuminate\Support\Facades\Config::get('status.new')))
 
         <form action="{{url('order/'.$order->id.'/reapprove')}}" method="POST" class="mt-3">
             @method('PUT')

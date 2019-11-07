@@ -22,6 +22,10 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class);
     }
 
+    public function execItems(){
+        return $this->hasMany(OrderDetail::class)->where('executor_id', auth()->id());
+    }
+
     public function comments(){
         return $this->hasMany(OrderComment::class)->orderBy('created_at', 'desc');
     }

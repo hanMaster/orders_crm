@@ -41,4 +41,4 @@ Route::patch('exec/{order}', 'ExecutionController@assignStore')->middleware('aut
 
 //executors
 Route::get('execute/{order}', 'ExecutionController@execute')->middleware('auth');
-Route::patch('execute/{order}', 'ExecutionController@updateExecution')->middleware('auth');
+Route::patch('execute/{item}', 'ExecutionController@executeItem')->middleware('auth');

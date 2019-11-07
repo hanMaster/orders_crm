@@ -24,6 +24,8 @@ class CreateOrderDetailsTable extends Migration
             $table->text('comment')->nullable();
             $table->string('delivery_date')->nullable();
             $table->string('attached_file')->nullable();
+            $table->boolean('done')->default(false);
+            $table->boolean('confirmed')->default(false);
             $table->timestamps();
         });
     }
