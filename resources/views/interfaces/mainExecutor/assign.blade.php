@@ -2,63 +2,113 @@
 
 @section('content')
 
-    <div class="header d-flex justify-content-between">
-        <h3>Заявка от {{$order->created_at}}</h3>
-        <h4><span style="color: #ED5565">Статус: </span>{{$order->status->name}}</h4>
-    </div>
-
-    <p>Объект: {{$order->bo->name}}</p>
-    <form action="{{url('exec/'. $order->id)}}" method="POST">
-        @method('PATCH')
-        @csrf
-    <div class="row">
-        <div class="col-9">
-
+    @include('layouts.include.header')
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#items" role="tab" aria-controls="items"
+               aria-selected="true">Заявка</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments"
+               aria-selected="false">Коментарии</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history"
+               aria-selected="false">История изменений</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="items" role="tabpanel" aria-labelledby="items-tab">
 
             <table class="table table-striped table-bordered">
                 <thead class="thead-dark">
                 <tr>
-                    <th style="width: 60px;">№</th>
+                    <th style="width: 45px;">№</th>
                     <th>Наименование материала</th>
-                    <th style="width: 90px;">Ед. изм.</th>
-                    <th style="width: 80px;">Кол-во</th>
-                    <th style="width: 130px;">Дата поставки</th>
-                    <th style="width: 220px;">Исполнитель</th>
+                    <th style="width: 81px;">Ед. изм.</th>
+                    <th style="width: 75px;">Кол-во</th>
+                    <th style="width: 130px;">Дата план</th>
+                    <th style="width: 130px;">Дата факт</th>
+                    <th style="width: 170px;">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle"
+                               href="#" role="button"
+                               id="dropdownMenuLink"
+                               data-toggle="dropdown"
+                               aria-haspopup="true"
+                               aria-expanded="false"
+                               style="color: white;"
+                            >
+                                Исполнитель
+                            </a>
 
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                @foreach($executors as $exec)
+                                    <a class="dropdown-item" href="#"
+                                       onclick="dropClick({{$exec->id}})"
+                                    >{{$exec->name}}</a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </th>
+                    <th style="width: 130px;">Статус</th>
+                    <th style="width: 200px;">Примечание</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($order->items as $item)
-                    <tr
-                        @if($item->done)
-                        style="text-decoration: line-through;"
-                        @endif
-                    >
+                    <tr @include('layouts.include.itemColors')>
+                        <td>{{$item->idx}}</td>
                         <td>
-                            {{$item->idx}}
-                            @if(!$item->done)
-                                <input type="checkbox" name="{{'items['.$item->id.']'}}">
-                            @endif
-                        </td>
-                        <td>
-                            {{$item->order_item}}
-                            @include('layouts.include.attach')
-                            @include('layouts.include.logs')
-
+                            <div class="d-block">
+                                <strong>{{$item->order_item}}</strong>
+                            </div>
+                            <div class="d-block">
+                                @include('layouts.include.attach')
+                            </div>
+                            <div class="d-block">
+                                @include('layouts.include.logs')
+                            </div>
                         </td>
                         <td>{{$item->ed->name}}</td>
                         <td>{{$item->quantity}}</td>
-                        <td>{{$item->delivery_date}}</td>
-                        <td>{{$item->executor->name?? 'Не назначен'}}</td>
+                        <td>{{$item->date_plan}}</td>
+                        <td>{{$item->date_fact}}</td>
+                        <td>
 
+                            <div class="dropdown">
+                                <a href="#" role="button"
+                                   id="dropdownMenuLink{{$item->id}}"
+                                   data-toggle="dropdown"
+                                   aria-haspopup="true"
+                                   aria-expanded="false"
+                                >
+                                    {{$item->executor->name?? 'Не назначен'}}
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{$item->id}}">
+                                    @foreach($executors as $exec)
+                                        <a class="dropdown-item" href="#"
+                                           onclick="dropSingleClick({{$item->id}},{{$exec->id}})"
+                                        >{{$exec->name}}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+
+
+                        </td>
+                        <td>{{$item->line_status_id === 0 ? 'Новая': $item->status->name}}</td>
+                        <td>{{$item->comment}}</td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
+        </div>
+        <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
 
-            <div class="card mt-5">
-                <div class="card-header d-flex justify-content-between">
-                    Комментарии <a href="{{url('order/'. $order->id . '/comments/create')}}">Добавить</a>
+            <div class="card">
+                <div class="card-header">
+                    <a href="{{url('order/'. $order->id . '/comments/create')}}">Добавить</a>
                 </div>
                 <div class="card-body">
                     @foreach($order->comments as $comment)
@@ -72,27 +122,53 @@
                 </div>
             </div>
         </div>
-        <div class="col-3">
-            <div class="card">
-                <div class="card-header">
-                    Назначить исполнителя
-                </div>
-                <div class="card-body">
-
-                        <select name="executor"  class="form-control">
-                            <option value="0">Не назначен</option>
-                            @foreach($executors as $exec)
-                                <option value="{{$exec->id}}">{{$exec->name}}</option>
-                            @endforeach
-                        </select>
-                        <button type="submit" class="btn btn-primary btn-block mt-3">Назначить</button>
-
-                </div>
-            </div>
-        </div>
+        <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">history</div>
     </div>
+
+
+    <form
+        id="mass-assign-form"
+        action="{{url('exec/'. $order->id)}}"
+        method="POST"
+        style="display: none;"
+    >
+        @method('PATCH')
+        @csrf
+        <input type="hidden" name="executor" id="exec_input" value="">
+    </form>
+    <form
+        id="single-assign-form"
+        action="{{url('exec-single')}}"
+        method="POST"
+        style="display: none;"
+    >
+        @method('PATCH')
+        @csrf
+        <input type="hidden" name="order_id" value="{{$order->id}}">
+        <input type="hidden" name="executor" id="single_exec_input" value="">
+        <input type="hidden" name="item" id="item_id" value="">
+
     </form>
 
 @endsection
 
+@section('js')
+    <script>
+        const dropClick = id => {
+            event.preventDefault();
+            document.querySelector('#exec_input').value = id;
+            if (confirm('Назначить исполнителя на всю заявку?')) {
+                document.getElementById('mass-assign-form').submit();
+            }
+        }
+        const dropSingleClick = (item_id, exec_id) => {
+            console.log('item: ', item_id);
+            console.log("exec: ", exec_id);
+            event.preventDefault();
+            document.querySelector('#single_exec_input').value = exec_id;
+            document.querySelector('#item_id').value = item_id;
+            document.getElementById('single-assign-form').submit();
+        }
 
+    </script>
+@endsection

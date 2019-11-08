@@ -1,7 +1,7 @@
 @if ($item->attached_file)
     <!-- Button trigger modal -->
     <a href="#" data-toggle="modal" data-target="{{"#item". $item->id}}">
-        (Изображение)
+        Изображение
     </a>
     <!-- Modal -->
     <div class="modal fade" id="{{"item". $item->id}}" tabindex="-1" role="dialog" aria-labelledby="{{"item". $item->id."Label"}}"

@@ -14,7 +14,7 @@
                                 @foreach($orders as $order)
                                     <li>
                                         <a href="{{url("execute/". $order->id )}}">
-                                            {{$order->bo->name}} - заявка от {{$order->created_at}} - статус: {{$order->status->name}}
+                                            {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>
                                 @endforeach

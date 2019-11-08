@@ -10,5 +10,5 @@ return [
     'main_executor'     => 7,
     'executor'          => 8,
     'exec_done'         => 9,
-    'confirmed'         => 10
+    'partial_done'      => 10
 ];

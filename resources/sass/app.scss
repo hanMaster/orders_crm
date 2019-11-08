@@ -7,6 +7,9 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+//Datepicker
+@import './bootstrap-datepicker.scss';
+
 ul {
     list-style-type: none;
 }
@@ -47,3 +50,8 @@ a {
     table-layout: fixed;
 }
 
+.wrapper{
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+}

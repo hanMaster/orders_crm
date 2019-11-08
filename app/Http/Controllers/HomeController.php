@@ -36,11 +36,14 @@ class HomeController extends Controller
 
             case Config::get('role.approve'):
 
-                $orders = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', \auth()->id()))
+                $ordersToApprove = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', \auth()->id()))
                     ->whereIn('status_id', [Config::get('status.new'),Config::get('status.re_approve'), Config::get('status.approve_in_process')])
                     ->orderBy('updated_at', 'desc')->get();
 
-                return view('interfaces.approve.index', compact('orders'));
+                $ordersAll = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', \auth()->id()))
+                    ->orderBy('updated_at', 'desc')->get();
+
+                return view('interfaces.approve.index', compact(['ordersToApprove','ordersAll']));
 
             case Config::get('role.main_executor'):
                 $orders = Order::whereNotIn('status_id', [Config::get('status.edit')])

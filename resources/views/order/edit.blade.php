@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3 class="text-center mb-3">Редактирование заявки</h3>
+    <h3 class="text-center mb-3">Редактирование заявки {{$order->name}}</h3>
     <p>Объект: <strong>{{$order->bo->name??''}}</strong></p>
 
 
@@ -25,19 +25,27 @@
                 <tr>
                     <td>{{$loop->iteration}}</td>
                     <td>
-                        {{$item->order_item}}
-                        @include('layouts.include.attach')
+                        <div>
+                            <strong>{{$item->order_item}}</strong>
+                        </div>
+                        <div>
+                            @include('layouts.include.attach')
+                        </div>
+                        <div>
+                            {{$item->comment}}
+                        </div>
                     </td>
                     <td>{{$item->ed->name}}</td>
                     <td>{{$item->quantity}}</td>
-                    <td>{{$item->delivery_date}}</td>
+                    <td>{{$item->date_plan}}</td>
                     <td style="padding: 0; vertical-align: middle; text-align: center; ">
                         <form onsubmit="if(confirm('Удалить?')) {return true} else {return false}"
                               action="{{url('/order/items/'.$item->id)}}" method="POST">
                             @method('delete')
                             @csrf
                             <input type="hidden" name="order_id" value="{{$order->id}}">
-                            <a class="btn btn-outline-secondary" href="{{route('order.editItemFromEdit',['order' => $order, 'item' => $item])}}">Редактировать</a>
+                            <a class="btn btn-outline-secondary"
+                               href="{{route('order.editItemFromEdit',['order' => $order, 'item' => $item])}}">Редактировать</a>
                             <button type="submit" class="btn btn-outline-danger">Удалить</button>
                         </form>
                     </td>

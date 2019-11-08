@@ -12,7 +12,7 @@ Route::resource('/bo', 'BuildObjectController')->middleware('auth');
 
 Route::get('/order/create', 'OrderController@create')->middleware('auth')->name('order.create');
 Route::post('order/create', 'OrderController@addItemFromCreate')->middleware('auth')->name('order.addItemCreate');
-Route::patch('order/{order}/set-object', 'OrderController@setObject')->middleware('auth');
+Route::patch('order/{order}/set-name-object', 'OrderController@setNameObject')->middleware('auth');
 
 Route::put('order/{order}/edit', 'OrderController@addItemFromEdit')->middleware('auth')->name('order.addItemEdit');
 Route::get('order/{order}/edit', 'OrderController@edit')->middleware('auth')->name('order.edit');
@@ -38,7 +38,10 @@ Route::put('approve/{order}', 'OrderController@makeApprove')->middleware('auth')
 //Assign executor
 Route::get('exec/{order}/assign', 'ExecutionController@assign')->middleware('auth');
 Route::patch('exec/{order}', 'ExecutionController@assignStore')->middleware('auth');
+Route::patch('exec-single', 'ExecutionController@assignSingleStore')->middleware('auth');
 
 //executors
 Route::get('execute/{order}', 'ExecutionController@execute')->middleware('auth');
 Route::patch('execute/{item}', 'ExecutionController@executeItem')->middleware('auth');
+
+Route::get('execute/{order}/item/{item}', 'ExecutionController@getExecuteItem')->middleware('auth');

@@ -35,31 +35,46 @@
                 <div class="form-group">
                     <label for="Input_quantity">Кол-во</label>
                     <input
-                        type="number"
-                        name="quantity"
-                        value="{{$item->quantity}}"
                         class="form-control"
                         id="Input_quantity"
-                        value='1'
+                        name="quantity"
+                        type="number"
+                        value="{{$item->quantity}}"
                     >
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
-                    <label for="Input_date">Дата доставки</label>
+                    <label for="input_date">Дата доставки</label>
                     <input
                         class="form-control"
+                        id="input_date"
+                        name="date_plan"
                         type="text"
-                        value="{{$item->delivery_date}}"
-                        name="delivery_date"
-                        id="Input_date"
+                        value="{{$item->date_plan}}"
                     >
                 </div>
             </div>
 
         </div>
-        @include('layouts.include.attach')
-        <input type="file" name="attached_file" >
+
+
+        <div class="form-group">
+            @include('layouts.include.attach')
+            <input type="file" name="attached_file" >
+        </div>
+
+        <div class="form-group">
+            <label for="comment">Примечание</label>
+            <input
+                type="text"
+                name="comment"
+                value="{{$item->comment}}"
+                class="form-control"
+                id="comment"
+                placeholder="Добавьте примечание"
+            >
+        </div>
 
         <input type="hidden" name="order_id" value="{{$order->id}}">
         <button class="btn btn-success btn-block mt-3" type="submit" >Сохранить изменения</button>
@@ -67,3 +82,25 @@
 
 @endsection
 
+@section('js')
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+    </script>
+
+    <script>
+        $().ready(function(){
+            $('#input_date').datepicker({
+                format: 'dd.mm.yyyy',
+                autoclose: true,
+                startDate: '-13Y'
+            });
+
+{{--            const dt = {!! json_encode($calendar->date_event)!!};--}}
+
+            $('#input_date').datepicker('update', dt);
+        });
+
+    </script>
+@endsection

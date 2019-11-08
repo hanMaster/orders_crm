@@ -18,7 +18,6 @@ class CreateStatusesTable extends Migration
             $table->string('status');
             // русское название статуса
             $table->string('name');
-            $table->timestamps();
         });
     }
 

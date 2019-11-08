@@ -21,11 +21,11 @@ class CreateOrderDetailsTable extends Migration
             $table->integer('idx')->nullable();
             $table->integer('ed_id');
             $table->double('quantity');
-            $table->text('comment')->nullable();
-            $table->string('delivery_date')->nullable();
+            $table->string('comment')->nullable();
+            $table->string('date_plan')->nullable();
+            $table->string('date_fact')->nullable();
             $table->string('attached_file')->nullable();
-            $table->boolean('done')->default(false);
-            $table->boolean('confirmed')->default(false);
+            $table->integer('line_status_id')->default(1);
             $table->timestamps();
         });
     }

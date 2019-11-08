@@ -3,12 +3,16 @@
 @section('content')
 
     <div class="header d-flex justify-content-between">
-        <h3>Заявка от {{$order->created_at}}</h3>
+        <h3>{{$order->name}} от {{$order->created_at}}</h3>
         <h4><span style="color: #ED5565">Статус: </span>{{$order->status->name}}</h4>
     </div>
 
     <div class="header d-flex justify-content-between">
-        <p>Объект: {{$order->bo->name}}</p>
+        <div>
+            <p>Объект: {{$order->bo->name}}</p>
+            <p>Создатель: {{$order->starter->name}}</p>
+        </div>
+
         <a href="{{url("order/".$order->id."/edit")}}">Редактировать заявку</a>
     </div>
 
@@ -20,8 +24,6 @@
             <th style="width: 100px;">Ед. изм.</th>
             <th style="width: 100px;">Кол-во</th>
             <th style="width: 150px;">Дата поставки</th>
-            <th style="width: 220px;">Исполнитель</th>
-
         </tr>
         </thead>
         <tbody>
@@ -29,13 +31,15 @@
             <tr>
                 <td>{{$item->idx}}</td>
                 <td>
-                    {{$item->order_item}}
-                    @include('layouts.include.attach')
+                    <div><strong>{{$item->order_item}}</strong></div>
+                    <div>@include('layouts.include.attach')</div>
+                    <div class="d-block" style="color: #343a40; font-size: 12px;">
+                        {{$item->comment}}
+                    </div>
                 </td>
                 <td>{{$item->ed->name}}</td>
                 <td>{{$item->quantity}}</td>
-                <td>{{$item->delivery_date}}</td>
-                <td>{{$item->executor ?? 'не назначен'}}</td>
+                <td>{{$item->date_plan}}</td>
             </tr>
         @endforeach
         </tbody>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\LineStatus;
 use App\Status;
 use App\Role;
 use App\User;
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->fillRoles();
         $this->fillUsers();
         $this->fillEds();
+        $this->fillLineStatuses();
     }
 
     public function fillStatuses()
@@ -32,7 +34,20 @@ class DatabaseSeeder extends Seeder
         Status::create(['status' => 'main_executor', 'name' => 'Принята к исполнению']);
         Status::create(['status' => 'executor', 'name' => 'В процессе исполнения']);
         Status::create(['status' => 'exec_done', 'name' => 'Исполнена']);
-        Status::create(['status' => 'confirmed', 'name' => 'Исполнение подтверждено']);
+        Status::create(['status' => 'partial_done', 'name' => 'Частично исполнена']);
+    }
+
+    public function fillLineStatuses()
+    {
+        LineStatus::create(['status' => 'new', 'name' => 'Новая']);
+        LineStatus::create(['status' => 'in_work', 'name' => 'В работе']);
+        LineStatus::create(['status' => 'await_payment', 'name' => 'Ожидает оплаты']);
+        LineStatus::create(['status' => 'invoice_approve', 'name' => 'Счет на согласовании']);
+        LineStatus::create(['status' => 'ordered', 'name' => 'Заказано']);
+        LineStatus::create(['status' => 'in_deliver', 'name' => 'В пути']);
+        LineStatus::create(['status' => 'deliver_to_site', 'name' => 'Доставка на объект']);
+        LineStatus::create(['status' => 'not_deliverable', 'name' => 'Поставка не возможна']);
+        LineStatus::create(['status' => 'done', 'name' => 'Исполнено']);
     }
 
     public function fillRoles()

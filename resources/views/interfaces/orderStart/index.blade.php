@@ -20,9 +20,9 @@
                         @endif
 
                         @if (isset($orders))
-                            <ul class="list-group">
+                            <ol>
                                 @foreach($orders as $order)
-                                <li class="list-group-item">
+                                <li>
                                     <a href="{{url("order/". $order->id)}}"
                                     @if($order->status_id == \Illuminate\Support\Facades\Config::get('status.new'))
                                     style="color: #1aa727;"
@@ -35,11 +35,11 @@
 
                                     @endif
                                     >
-                                    {{$loop->iteration}}. {{$order->bo->name??''}} - заявка от {{$order->created_at}} - статус: {{$order->status->name}}
+                                    {{$loop->iteration}}. {{$order->bo->name??''}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
                                     </a>
                                 </li>
                                 @endforeach
-                            </ul>
+                            </ol>
                         @endif
                     </div>
                 </div>

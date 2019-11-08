@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'status_id', 'starter_id'
+        'status_id', 'starter_id', 'name'
     ];
 
     public function bo(){
@@ -30,4 +30,7 @@ class Order extends Model
         return $this->hasMany(OrderComment::class)->orderBy('created_at', 'desc');
     }
 
+    public function starter(){
+        return $this->belongsTo(User::class, 'starter_id');
+    }
 }

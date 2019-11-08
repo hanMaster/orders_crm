@@ -9,7 +9,6 @@ use App\Order;
 use App\OrderComment;
 use App\OrderDetail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use App\Services\Numerator;
@@ -23,7 +22,7 @@ class OrderController extends Controller
         $order = Order::where(['status_id' => Config::get('status.edit'), 'starter_id'=>$starter_id])->first();
 
         if (!$order){
-            $order = Order::create(['status_id' => Config::get('status.edit'), 'starter_id'=>$starter_id]);
+            $order = Order::create(['status_id' => Config::get('status.edit'), 'starter_id'=>$starter_id, 'name' => '']);
         }
 
         if(!$order->object_id){
@@ -36,11 +35,15 @@ class OrderController extends Controller
         return view('order.create', compact(['order', 'eds']));
     }
 
-    public function setObject(Order $order, Request $request){
-        $request->validate(['object_id' => 'required|numeric']);
+    public function setNameObject(Order $order, Request $request){
+        $request->validate([
+            'object_id' => 'required|numeric',
+            'name' => 'required|min:2'
+        ]);
         $order->object_id = $request->object_id;
+        $order->name = $request->name;
         $order->save();
-        return $this->create();
+        return back();
     }
 
 
@@ -49,7 +52,9 @@ class OrderController extends Controller
             'item' => 'required',
             'quantity' => 'required|numeric|gt:0',
             'ed_id' => 'required|numeric|gt:0',
-            'attached_file' => 'image|max:1000'
+            'attached_file' => 'image|max:1000',
+            'comment' => 'max:190',
+            'date_plan' => 'date|after:today'
         ]);
 
         $filePath = null;
@@ -62,18 +67,18 @@ class OrderController extends Controller
             'order_id'=>$request->order_id,
             'ed_id' => $request->ed_id,
             'quantity' => $request->quantity,
-            'delivery_date' => $request->delivery_date,
-            'attached_file' => $filePath
+            'date_plan' => $request->date_plan,
+            'attached_file' => $filePath,
+            'comment' => $request->comment
         ]);
 
         Log::create([
             'order_details_id' => $od->id,
             'user_id' => Auth::id(),
-            'message' => "Создание"
-
+            'message' => "Создание позиции"
         ]);
 
-        return $this->create();
+        return back();
     }
 
     public function addItemFromEdit(Request $request, Order $order){
@@ -81,7 +86,9 @@ class OrderController extends Controller
             'item' => 'required',
             'order_id' => 'required|numeric',
             'quantity' => 'required|gt:0',
-            'attached_file' => 'image|max:1000'
+            'attached_file' => 'image|max:1000',
+            'comment' => 'max:190',
+            'date_plan' => 'date|after:today'
         ]);
 
         $filePath = null;
@@ -94,13 +101,18 @@ class OrderController extends Controller
             'order_id'=>$order->id,
             'ed_id' => $request->ed_id,
             'quantity' => $request->quantity,
-            'delivery_date' => $request->delivery_date,
-            'attached_file' => $filePath
+            'date_plan' => $request->date_plan,
+            'attached_file' => $filePath,
+            'comment' => $request->comment
         ]);
+
+        //Пронумеровали позиции в заявке
+        Numerator::numerate($order);
+
         Log::create([
             'order_details_id' => $od->id,
             'user_id' => Auth::id(),
-            'message' => "Создание"
+            'message' => "Создание позиции"
 
         ]);
         return $this->edit($order);
@@ -108,15 +120,14 @@ class OrderController extends Controller
 
     public function store(Request $request){
         $order = Order::where('id',$request->order_id)->first();
-        if($order->object_id == null) {
-            return back()->with('error', 'Вы ничего не добавили в заявку');
-        }
 
-        if ($order->status_id == \Illuminate\Support\Facades\Config::get('status.not_approved')){
+        if ($order->status_id == Config::get('status.not_approved')){
             $order->status_id = Config::get('status.re_approve');
         }else{
             $order->status_id = Config::get('status.new');
         }
+        $order->save();
+        $order->created_at = $order->updated_at;
         $order->save();
         //Пронумеровали позиции в заявке
         Numerator::numerate($order);
@@ -166,7 +177,7 @@ class OrderController extends Controller
     public function startApprove(Order $order){
         $order->status_id = Config::get('status.approve_in_process');
         $order->save();
-        return view('interfaces.approve.start', compact('order'));
+        return view('interfaces.approve.approve', compact('order'));
     }
 
     public function makeApprove(Order $order, Request $request){
@@ -214,7 +225,9 @@ class OrderController extends Controller
         $request->validate([
             'item' => 'required',
             'quantity' => 'required|gt:0',
-            'attached_file' => 'image|max:1000'
+            'attached_file' => 'image|max:1000',
+            'comment' => 'max:190',
+            'date_plan' => 'date|after:today'
         ]);
 
         if ($request->hasFile('attached_file')){
@@ -226,13 +239,14 @@ class OrderController extends Controller
         $item->order_item = $request->item;
         $item->ed_id = $request->ed_id;
         $item->quantity = $request->quantity;
-        $item->delivery_date = $request->delivery_date;
+        $item->date_plan = $request->date_plan;
+        $item->comment = $request->comment;
         $item->save();
 
         Log::create([
             'order_details_id' => $item->id,
             'user_id' => Auth::id(),
-            'message' => "Изменение"
+            'message' => "Изменение позиции"
 
         ]);
 

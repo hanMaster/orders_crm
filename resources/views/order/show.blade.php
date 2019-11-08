@@ -2,70 +2,77 @@
 
 @section('content')
 
-    <div class="header d-flex justify-content-between">
-        <h3>Заявка от {{$order->created_at}}</h3>
-        <h4><span style="color: #ED5565">Статус: </span>{{$order->status->name}}</h4>
-    </div>
+    @include('layouts.include.header')
 
-    <div class="info d-flex justify-content-between">
-        <p>Объект: {{$order->bo->name??''}}</p>
-        @if ($order->executor)
-            <p style="color: #227dc7;">Исполнитель: {{$order->executor->name}}</p>
-        @endif
-    </div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#items" role="tab" aria-controls="items"
+               aria-selected="true">Заявка</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#comments" role="tab" aria-controls="comments"
+               aria-selected="false">Коментарии</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history"
+               aria-selected="false">История изменений</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="items" role="tabpanel" aria-labelledby="items-tab">
 
-
-    <table class="table table-striped table-bordered">
-        <thead class="thead-dark">
-        <tr>
-            <th style="width: 50px;">№</th>
-            <th>Наименование материала</th>
-            <th style="width: 100px;">Ед. изм.</th>
-            <th style="width: 100px;">Кол-во</th>
-            <th style="width: 150px;">Дата поставки</th>
-            <th style="width: 220px;">Исполнитель</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        @foreach ($order->items as $item)
-            <tr
-                @if($item->done)
-                style="text-decoration: line-through;"
-                @endif
-            >
-                <td>{{$item->idx}}</td>
-
-                <td>
-                    {{$item->order_item}}
-                    @include('layouts.include.attach')
-                </td>
-
-                <td>{{$item->ed->name}}</td>
-                <td>{{$item->quantity}}</td>
-                <td>{{$item->delivery_date}}</td>
-                <td>{{$item->executor->name ?? 'не назначен'}}</td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-
-    <div class="card">
-        <div class="card-header d-flex justify-content-between">
-            Комментарии <a href="{{url('order/'. $order->id . '/comments/create')}}">Добавить</a>
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th style="width: 50px;">№</th>
+                    <th>Наименование материала</th>
+                    <th style="width: 81px;">Ед. изм.</th>
+                    <th style="width: 75px;">Кол-во</th>
+                    <th style="width: 130px;">Дата план</th>
+                    <th style="width: 130px;">Дата факт</th>
+                    <th style="width: 100px;">Статус</th>
+                    <th style="width: 160px;">Исполнитель</th>
+                    <th style="width: 200px;">Примечание</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach ($order->items as $item)
+                    <tr @include('layouts.include.itemColors') >
+                        <td>{{$item->idx}}</td>
+                        <td>
+                            <div><strong>{{$item->order_item}}</strong></div>
+                            <div>@include('layouts.include.attach')</div>
+                        </td>
+                        <td>{{$item->ed->name}}</td>
+                        <td>{{$item->quantity}}</td>
+                        <td>{{$item->date_plan}}</td>
+                        <td>{{$item->date_fact}}</td>
+                        <td>{{$item->line_status_id === 0 ? 'Новая': $item->status->name}}</td>
+                        <td>{{$item->executor->name ?? 'не назначен'}}</td>
+                        <td>{{$item->comment}}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
         </div>
-        <div class="card-body">
-            @foreach($order->comments as $comment)
-                <div class="comment-box">
-                    <strong>{{$comment->user->name}}</strong>
-                    {{$comment->comment}}
-                    <span>{{$comment->created_at}}</span>
+        <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+            <div class="card">
+                <div class="card-header">
+                    <a href="{{url('order/'. $order->id . '/comments/create')}}">Добавить</a>
                 </div>
-            @endforeach
-
+                <div class="card-body">
+                    @foreach($order->comments as $comment)
+                        <div class="comment-box">
+                            <strong>{{$comment->user->name}}</strong>
+                            {{$comment->comment}}
+                            <span>{{$comment->created_at}}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         </div>
+        <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">history</div>
     </div>
-
 
 
     @if (auth()->user()->role_id == \Illuminate\Support\Facades\Config::get('role.starter')

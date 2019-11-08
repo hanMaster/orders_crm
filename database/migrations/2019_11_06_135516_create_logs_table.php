@@ -18,6 +18,7 @@ class CreateLogsTable extends Migration
             $table->integer('order_details_id');
             $table->integer('user_id');
             $table->string('message');
+            $table->boolean('isLine')->default(true);
             $table->timestamps();
         });
     }

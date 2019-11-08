@@ -9,12 +9,12 @@
         <div class="form-group">
             <label for="Input_item">Наименование</label>
             <input
-                type="text"
-                name="item"
-                value="{{old('item')}}"
                 class="form-control"
                 id="Input_item"
+                name="item"
                 placeholder="Название материала"
+                type="text"
+                value="{{old('item')}}"
             >
         </div>
         <div class="row">
@@ -23,7 +23,11 @@
                     <label for="select_ed">Ед.изм.</label>
                     <select class="form-control" name="ed_id" id="select_ed">
                         @foreach($eds as $ed)
-                            <option value="{{$ed->id}}">{{$ed->name}}</option>
+                            <option value="{{$ed->id}}"
+                                @if(old('ed_id') == $ed->id)
+                                selected="selected"
+                                @endif>{{$ed->name}}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -32,34 +36,66 @@
                 <div class="form-group">
                     <label for="Input_quantity">Кол-во</label>
                     <input
-                        type="number"
-                        name="quantity"
-                        value="{{old('quantity')}}"
                         class="form-control"
                         id="Input_quantity"
-                        value='1'
+                        name="quantity"
+                        type="number"
+                        value="{{old('quantity')??1}}"
                     >
                 </div>
             </div>
             <div class="col-4">
                 <div class="form-group">
-                    <label for="Input_date">Дата доставки</label>
+                    <label for="input_date">Желаемая дата доставки</label>
                     <input
                         class="form-control"
+                        id="input_date"
+                        name="date_plan"
                         type="text"
-                        value="{{date("d.m.Y", mktime(0, 0, 0, date('m'), date('d')+3, date('Y')))}}"
-                        name="delivery_date"
-                        id="Input_date"
+                        value="{{old('date_plan') ?? date("d.m.Y", mktime(0, 0, 0, date('m'), date('d')+3, date('Y')))}}"
                     >
                 </div>
             </div>
 
         </div>
-        <input type="file" name="attached_file" >
+        <div class="form-group">
+            <input type="file" name="attached_file" >
+        </div>
 
+        <div class="form-group">
+            <label for="comment">Примечание</label>
+            <input
+                type="text"
+                name="comment"
+                value="{{old('comment')}}"
+                class="form-control"
+                id="comment"
+                placeholder="Добавьте примечание"
+            >
+        </div>
         <input type="hidden" name="order_id" value="{{$order->id}}">
         <button class="btn btn-success btn-block mt-3" type="submit" >Добавить строку</button>
     </form>
 
 @endsection
 
+@section('js')
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+    </script>
+
+    <script>
+        $().ready(function(){
+            $('#input_date').datepicker({
+                format: 'dd.mm.yyyy',
+                autoclose: true,
+                startDate: '-13Y'
+            });
+
+            $('#input_date').datepicker('update', dt);
+        });
+
+    </script>
+@endsection
