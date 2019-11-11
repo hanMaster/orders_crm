@@ -78,7 +78,7 @@ class ExecutionController extends Controller
     }
 
     public  function itemsStatusChange(Order $order, Request $request){
-        foreach ($order->items as $item) {
+        foreach ($order->execItems as $item) {
             $item->line_status_id = $request->status_id;
             $item->save();
         }
@@ -87,7 +87,9 @@ class ExecutionController extends Controller
 
     public function print(Order $order, Request $request){
         if(isset($request->items)){
-            $items = OrderDetail::whereIn('id', array_keys($request->items))->get();
+            $items = OrderDetail::whereIn('idx', array_keys($request->items))->get();
+        }else{
+            $item = $order->execItems;
         }
         return view('interfaces.executor.print', compact(['order','items']));
     }

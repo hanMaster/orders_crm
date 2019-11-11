@@ -30,7 +30,7 @@
                     <th style="width: 75px;">Кол-во</th>
                     <th style="width: 130px;">Дата план</th>
                     <th style="width: 130px;">Дата факт</th>
-                    <th style="width: 100px;">Статус</th>
+                    <th style="width: 120px;">Статус</th>
                     <th style="width: 160px;">Исполнитель</th>
                     <th style="width: 200px;">Примечание</th>
                 </tr>

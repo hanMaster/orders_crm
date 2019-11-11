@@ -64,7 +64,7 @@
                         <tr @include('layouts.include.itemColors') >
                             <td>
                                 {{$item->idx}}
-                                <input type="checkbox" class="checkbox" name="items[{{$item->id}}]"/>
+                                <input type="checkbox" class="checkbox" name="items[{{$item->idx}}]"/>
                             </td>
                             <td>
                                 <div>

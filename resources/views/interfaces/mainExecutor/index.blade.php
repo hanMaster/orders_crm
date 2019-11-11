@@ -12,7 +12,7 @@
                             <ul>
                                 @foreach($orders as $order)
                                     <li>
-                                        @if($order->status_id === Config::get('status.approved')||$order->status_id === Config::get('status.executor'))
+                                        @if($order->status_id === \Illuminate\Support\Facades\Config::get('status.approved')||$order->status_id === \Illuminate\Support\Facades\Config::get('status.executor'))
                                             <a href="{{url("exec/". $order->id . '/assign')}}"
                                         @else
                                             <a href="{{url("order/". $order->id )}}"
