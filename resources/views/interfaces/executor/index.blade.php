@@ -10,15 +10,15 @@
                     <div class="card-body">
 
                         @if (isset($orders))
-                            <ol>
+                            <ul>
                                 @foreach($orders as $order)
                                     <li>
                                         <a href="{{url("execute/". $order->id )}}">
-                                            {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
+                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>
                                 @endforeach
-                            </ol>
+                            </ul>
                         @endif
 
                     </div>

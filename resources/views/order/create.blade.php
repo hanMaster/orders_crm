@@ -139,6 +139,7 @@
                         <th style="width: 100px;">Ед. изм.</th>
                         <th style="width: 100px;">Кол-во</th>
                         <th style="width: 140px;">Дата поставки</th>
+                        <th style="width: 200px;">Примечание</th>
                     </tr>
                     </thead>
 
@@ -154,6 +155,7 @@
                                     <td>{{$item->ed->name}}</td>
                                     <td>{{$item->quantity}}</td>
                                     <td>{{$item->date_plan}}</td>
+                                    <td>{{$item->comment}}</td>
                                 </tr>
                             @endforeach
                         @endif

@@ -15,7 +15,7 @@ class CreateLogsTable extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('order_details_id');
+            $table->integer('subject_id');
             $table->integer('user_id');
             $table->string('message');
             $table->boolean('isLine')->default(true);

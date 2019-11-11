@@ -19,10 +19,10 @@ class OrderController extends Controller
 
     public function create(){
         $starter_id = auth()->id();
-        $order = Order::where(['status_id' => Config::get('status.edit'), 'starter_id'=>$starter_id])->first();
+        $order = Order::where(['status_id' => Config::get('status.creating'), 'starter_id'=>$starter_id])->first();
 
         if (!$order){
-            $order = Order::create(['status_id' => Config::get('status.edit'), 'starter_id'=>$starter_id, 'name' => '']);
+            $order = Order::create(['status_id' => Config::get('status.creating'), 'starter_id'=>$starter_id, 'name' => '']);
         }
 
         if(!$order->object_id){
@@ -73,9 +73,9 @@ class OrderController extends Controller
         ]);
 
         Log::create([
-            'order_details_id' => $od->id,
+            'subject_id' => $od->id,
             'user_id' => Auth::id(),
-            'message' => "Создание позиции"
+            'message' => "Создание позиции",
         ]);
 
         return back();
@@ -110,7 +110,7 @@ class OrderController extends Controller
         Numerator::numerate($order);
 
         Log::create([
-            'order_details_id' => $od->id,
+            'subject_id' => $od->id,
             'user_id' => Auth::id(),
             'message' => "Создание позиции"
 
@@ -123,14 +123,23 @@ class OrderController extends Controller
 
         if ($order->status_id == Config::get('status.not_approved')){
             $order->status_id = Config::get('status.re_approve');
+            $message = "Заявка переведена в статус <strong>Для повторного согласования</strong>";
         }else{
             $order->status_id = Config::get('status.new');
+            $message = "Заявка переведена в статус <strong>Новая</strong>";
         }
-        $order->save();
         $order->created_at = $order->updated_at;
         $order->save();
+
         //Пронумеровали позиции в заявке
         Numerator::numerate($order);
+
+        Log::create([
+            'subject_id' => $order->id,
+            'user_id' => Auth::id(),
+            'message' => $message,
+            'isLine' => false
+        ]);
 
         return redirect('/');
     }
@@ -139,10 +148,24 @@ class OrderController extends Controller
         if($order){
             $order->status_id = Config::get('status.re_approve');
             $order->save();
+            Log::create([
+                'subject_id' => $order->id,
+                'user_id' => Auth::id(),
+                'message' => "Заявка переведена в статус <strong>Для повторного согласования</strong>",
+                'isLine' => false
+            ]);
+
         }
 
         return redirect('/');
     }
+
+    public function starterEdit(Order $order){
+        $order->status_id = Config::get('status.editing');
+        $order->save();
+        return $this->edit($order);
+    }
+
 
     public function edit(Order $order){
         $eds = Ed::all();
@@ -186,9 +209,19 @@ class OrderController extends Controller
         ]);
         if ($request->approved == 'on'){
             $order->status_id = Config::get('status.approved');
+            $message = "Заявка переведена в статус <strong>Согласована</strong>";
         }else{
             $order->status_id = Config::get('status.not_approved');
+            $message = "Заявка переведена в статус <strong>Не согласована</strong>";
         }
+
+        Log::create([
+            'subject_id' => $order->id,
+            'user_id' => Auth::id(),
+            'message' => $message,
+            'isLine' => false
+        ]);
+
         $order->save();
 
 
@@ -244,7 +277,7 @@ class OrderController extends Controller
         $item->save();
 
         Log::create([
-            'order_details_id' => $item->id,
+            'subject_id' => $item->id,
             'user_id' => Auth::id(),
             'message' => "Изменение позиции"
 

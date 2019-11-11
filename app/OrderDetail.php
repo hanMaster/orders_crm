@@ -23,7 +23,7 @@ class OrderDetail extends Model
     }
 
     public function logs(){
-        return $this->hasMany(Log::class, 'order_details_id');
+        return $this->hasMany(Log::class, 'subject_id')->where('isLine', true);
     }
 
     public function status(){

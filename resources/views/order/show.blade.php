@@ -47,7 +47,7 @@
                         <td>{{$item->quantity}}</td>
                         <td>{{$item->date_plan}}</td>
                         <td>{{$item->date_fact}}</td>
-                        <td>{{$item->line_status_id === 0 ? 'Новая': $item->status->name}}</td>
+                        <td>{{$item->status->name}}</td>
                         <td>{{$item->executor->name ?? 'не назначен'}}</td>
                         <td>{{$item->comment}}</td>
                     </tr>
@@ -71,18 +71,27 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">history</div>
+        <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+            <ul class="list-group">
+                @foreach($order->logs as $log)
+                    <li class="list-group-item">{{\Carbon\Carbon::parse($log->created_at)->format('d.m.Y H:i')." - "}} {!! $log->message !!}
+                        - {{$log->user->name}}</li>
+                @endforeach
+            </ul>
+        </div>
     </div>
 
 
     @if (auth()->user()->role_id == \Illuminate\Support\Facades\Config::get('role.starter')
             && ($order->status_id == \Illuminate\Support\Facades\Config::get('status.not_approved') ||
-            $order->status_id == \Illuminate\Support\Facades\Config::get('status.new')))
+            $order->status_id == \Illuminate\Support\Facades\Config::get('status.new') ||
+            $order->status_id == \Illuminate\Support\Facades\Config::get('status.editing')
+            ))
 
         <form action="{{url('order/'.$order->id.'/reapprove')}}" method="POST" class="mt-3">
             @method('PUT')
             @csrf
-            <a href="{{url('order/'.$order->id.'/edit')}}" class="btn btn-primary">Редактировать заявку</a>
+            <a href="{{url('order/'.$order->id.'/starter-edit')}}" class="btn btn-primary">Редактировать заявку</a>
             @if ($order->status_id == Config::get('status.not_approved'))
                 <button type="submit" class="btn btn-success">На согласование</button>
             @endif

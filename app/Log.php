@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Log extends Model
 {
     protected $fillable = [
-        'order_details_id', 'user_id', 'message'
+        'subject_id', 'user_id', 'message', 'isLine'
     ];
     public function item(){
         return $this->belongsTo(OrderDetail::class);

@@ -20,7 +20,7 @@
                         @endif
 
                         @if (isset($orders))
-                            <ol>
+                            <ul>
                                 @foreach($orders as $order)
                                 <li>
                                     <a href="{{url("order/". $order->id)}}"
@@ -39,7 +39,7 @@
                                     </a>
                                 </li>
                                 @endforeach
-                            </ol>
+                            </ul>
                         @endif
                     </div>
                 </div>

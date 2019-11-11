@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
 
     public function fillStatuses()
     {
-        Status::create(['status' => 'edit', 'name' => 'Создается']);
+        Status::create(['status' => 'creating', 'name' => 'Создается']);
+        Status::create(['status' => 'editing', 'name' => 'Редактируется']);
         Status::create(['status' => 'new', 'name' => 'Новая заявка']);
         Status::create(['status' => 'approve_in_process', 'name' => 'На согласовании']);
         Status::create(['status' => 're_approve', 'name' => 'Для повторного согласования']);

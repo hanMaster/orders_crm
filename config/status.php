@@ -1,14 +1,15 @@
 <?php
 
 return [
-    'edit'              => 1,
-    'new'               => 2,
-    'approve_in_process'=> 3,
-    're_approve'        => 4,
-    'approved'          => 5,
-    'not_approved'      => 6,
-    'main_executor'     => 7,
-    'executor'          => 8,
-    'exec_done'         => 9,
-    'partial_done'      => 10
+    'creating'          => 1,
+    'editing'           => 2,
+    'new'               => 3,
+    'approve_in_process'=> 4,
+    're_approve'        => 5,
+    'approved'          => 6,
+    'not_approved'      => 7,
+    'main_executor'     => 8,
+    'executor'          => 9,
+    'exec_done'         => 10,
+    'partial_done'      => 11
 ];

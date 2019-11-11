@@ -9,7 +9,7 @@
 
                     <div class="card-body">
                         @if (isset($orders))
-                            <ol>
+                            <ul>
                                 @foreach($orders as $order)
                                     <li>
                                         @if($order->status_id === Config::get('status.approved')||$order->status_id === Config::get('status.executor'))
@@ -28,11 +28,11 @@
 
                                                 @endif
                                             >
-                                            {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
+                                                {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>
                                 @endforeach
-                            </ol>
+                            </ul>
                         @endif
                     </div>
                 </div>

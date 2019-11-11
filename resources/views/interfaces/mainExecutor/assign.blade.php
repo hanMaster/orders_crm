@@ -95,9 +95,8 @@
                                 </div>
                             </div>
 
-
                         </td>
-                        <td>{{$item->line_status_id === 0 ? 'Новая': $item->status->name}}</td>
+                        <td>{{$item->status->name}}</td>
                         <td>{{$item->comment}}</td>
                     </tr>
                 @endforeach
@@ -122,7 +121,14 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">history</div>
+        <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+            <ul class="list-group">
+                @foreach($order->logs as $log)
+                    <li class="list-group-item">{{\Carbon\Carbon::parse($log->created_at)->format('d.m.Y H:i')." - "}} {!! $log->message !!}
+                        - {{$log->user->name}}</li>
+                @endforeach
+            </ul>
+        </div>
     </div>
 
 

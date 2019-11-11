@@ -33,4 +33,9 @@ class Order extends Model
     public function starter(){
         return $this->belongsTo(User::class, 'starter_id');
     }
+
+    public function logs(){
+        return $this->hasMany(Log::class, 'subject_id')->where('isLine', false);
+    }
+
 }

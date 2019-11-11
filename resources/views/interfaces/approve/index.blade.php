@@ -9,7 +9,7 @@
 
                     <div class="card-body">
                         @if (isset($ordersToApprove))
-                            <ol>
+                            <ul>
                                 @foreach($ordersToApprove as $order)
                                     <li>
                                         <a href="{{url("approve/". $order->id)}}"
@@ -24,11 +24,11 @@
 
                                             @endif
                                         >
-                                            {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
+                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>
                                 @endforeach
-                            </ol>
+                            </ul>
                         @endif
                     </div>
                 </div>
@@ -37,7 +37,7 @@
 
                     <div class="card-body">
                         @if (isset($ordersAll))
-                            <ol>
+                            <ul>
                                 @foreach($ordersAll as $order)
                                     <li>
                                         <a href="{{url("order/". $order->id)}}"
@@ -52,11 +52,11 @@
 
                                             @endif
                                         >
-                                            {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
+                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>
                                 @endforeach
-                            </ol>
+                            </ul>
                         @endif
                     </div>
                 </div>

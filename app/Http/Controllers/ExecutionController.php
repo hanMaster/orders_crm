@@ -6,6 +6,7 @@ use App\LineStatus;
 use App\Log;
 use App\Order;
 use App\OrderDetail;
+use App\Status;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,12 @@ class ExecutionController extends Controller
         $item->executor_id = $request->executor;
         $item->save();
 
+        Log::create([
+            'subject_id' => $item->id,
+            'user_id' => Auth::id(),
+            'message' => "Назначен исполнитель: ". $item->executor->name
+        ]);
+
         $order = Order::findOrFail($request->order_id);
         $order->status_id = Config::get('status.executor');
         $order->save();
@@ -43,7 +50,8 @@ class ExecutionController extends Controller
 
 
     public function execute(Order $order){
-        return view('interfaces.executor.execute', compact('order'));
+        $statuses = LineStatus::all();
+        return view('interfaces.executor.execute', compact(['order','statuses']));
     }
 
     public function executeItem(OrderDetail $item, Request $request){
@@ -51,14 +59,7 @@ class ExecutionController extends Controller
             'date_fact' => 'date|after:today'
         ]);
 
-
         if($item->line_status_id != $request->status){
-            $ls = LineStatus::findOrFail($request->status);
-            Log::create([
-                'order_details_id' => $item->id,
-                'user_id' => Auth::id(),
-                'message' => "Изменение статуса c <strong>".$item->status->name."</strong> на <strong>".$ls->name. "</strong>"
-            ]);
             $item->line_status_id = $request->status;
             $item->save();
         }
@@ -68,13 +69,26 @@ class ExecutionController extends Controller
             $item->save();
         }
 
-
-
         return back();
     }
 
     public function getExecuteItem(Order $order, OrderDetail $item){
         $line_statuses = LineStatus::all();
         return view('interfaces.executor.executeItem', compact(['order','item', 'line_statuses']));
+    }
+
+    public  function itemsStatusChange(Order $order, Request $request){
+        foreach ($order->items as $item) {
+            $item->line_status_id = $request->status_id;
+            $item->save();
+        }
+        return back();
+    }
+
+    public function print(Order $order, Request $request){
+        if(isset($request->items)){
+            $items = OrderDetail::whereIn('id', array_keys($request->items))->get();
+        }
+        return view('interfaces.executor.print', compact(['order','items']));
     }
 }

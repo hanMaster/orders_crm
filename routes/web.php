@@ -16,6 +16,7 @@ Route::patch('order/{order}/set-name-object', 'OrderController@setNameObject')->
 
 Route::put('order/{order}/edit', 'OrderController@addItemFromEdit')->middleware('auth')->name('order.addItemEdit');
 Route::get('order/{order}/edit', 'OrderController@edit')->middleware('auth')->name('order.edit');
+Route::get('order/{order}/starter-edit', 'OrderController@starterEdit')->middleware('auth')->name('order.edit');
 Route::get('order/{order}/edit/createItem', 'OrderController@createItem')->middleware('auth')->name('order.addItemFromEdit');
 
 Route::get('order/{order}/edit/{item}/editItem', 'OrderController@editItem')->middleware('auth')->name('order.editItemFromEdit');
@@ -43,5 +44,8 @@ Route::patch('exec-single', 'ExecutionController@assignSingleStore')->middleware
 //executors
 Route::get('execute/{order}', 'ExecutionController@execute')->middleware('auth');
 Route::patch('execute/{item}', 'ExecutionController@executeItem')->middleware('auth');
+Route::patch('items-status-change/{order}', 'ExecutionController@itemsStatusChange')->middleware('auth');
+//Route::get('print/{order}', 'ExecutionController@print')->middleware('auth');
+Route::post('print/{order}', 'ExecutionController@print')->middleware('auth');
 
 Route::get('execute/{order}/item/{item}', 'ExecutionController@getExecuteItem')->middleware('auth');
