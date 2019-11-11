@@ -16,7 +16,8 @@
             <div class="modal-body">
                 <ol>
                     @foreach($item->logs as $log)
-                        <li>{{\Carbon\Carbon::parse($log->created_at)->format('d.m.Y H:i')." - ". $log->message." - ".$log->user->name}}</li>
+                        <li>{{\Carbon\Carbon::parse($log->created_at)->format('d.m.Y H:i')." - "}} {!! $log->message !!}
+                            - {{$log->user->name}}</li>
                     @endforeach
                 </ol>
             </div>
