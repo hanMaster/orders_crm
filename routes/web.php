@@ -4,9 +4,11 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('/users/{user}/edit', 'UserController@edit');
+Route::get('users/{user}/edit', 'UserController@edit')->middleware('auth');
 
-Route::patch('/users/{user}', 'UserController@update');
+
+Route::patch('users/{user}', 'UserController@update')->middleware('auth');
+Route::patch('pass/{user}', 'UserController@updatePassword')->middleware('auth');
 
 Route::resource('/bo', 'BuildObjectController')->middleware('auth');
 

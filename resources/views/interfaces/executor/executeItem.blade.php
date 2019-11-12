@@ -98,15 +98,12 @@
     </script>
 
     <script>
-        $().ready(function () {
+        $().ready(function(){
             $('#date_fact').datepicker({
-                format: 'dd.mm.yyyy',
                 autoclose: true,
-                startDate: '-13Y'
+                startDate: '-1Y',
+                language: "ru",
             });
-
-            $('#date_fact').datepicker('update', dt);
         });
-
     </script>
 @endsection

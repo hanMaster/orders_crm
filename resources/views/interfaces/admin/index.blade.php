@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="d-flex justify-content-between p-1">
                 <h4 style="display:inline-block;">Пользователи</h4>
-                <a href="/register">Создать пользователя</a>
+                <a href="{{url('register')}}">Создать пользователя</a>
             </div>
             <table class="table table-striped table-bordered">
                 <thead class="thead-dark">
@@ -24,6 +24,7 @@
                         <td>{{$user->email}}</td>
                         <td>{{$user->role['name']}}</td>
                         <td class="text-right">
+                            @include("layouts.include.password")
                             <a href="{{url('/users/'.$user->id.'/edit')}}" class="btn btn-sm btn-success">Изменить</a>
                         </td>
                     </tr>
@@ -37,7 +38,7 @@
         <div class="col-md-4">
             <div class="d-flex justify-content-between p-1">
                 <h4 style="display:inline-block;">Объекты</h4>
-                <a href="/bo/create">Новый объект</a>
+                <a href="{{url('/bo/create')}}">Новый объект</a>
             </div>
             <table class="table table-striped table-bordered">
                 <thead class="thead-dark">

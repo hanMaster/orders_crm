@@ -89,13 +89,10 @@
     <script>
         $().ready(function(){
             $('#input_date').datepicker({
-                format: 'dd.mm.yyyy',
                 autoclose: true,
-                startDate: '-13Y'
+                startDate: '-1Y',
+                language: "ru",
             });
-
-            $('#input_date').datepicker('update', dt);
         });
-
     </script>
 @endsection

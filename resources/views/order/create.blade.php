@@ -43,7 +43,7 @@
 
             <div class="form-group">
                 <label for="object">Объект</label>
-                <select name="object_id" id=""object class="form-control">
+                <select name="object_id" id="object" class="form-control">
                     <option value="null" >Объект не выбран</option>
                     @foreach($objs as $obj)
                         <option value="{{$obj->id}}">{{$obj->name}}</option>
@@ -180,13 +180,10 @@
     <script>
         $().ready(function(){
             $('#input_date').datepicker({
-                format: 'dd.mm.yyyy',
                 autoclose: true,
-                startDate: '-13Y'
+                startDate: '-1Y',
+                language: "ru",
             });
-
-            $('#input_date').datepicker('update', dt);
         });
-
     </script>
 @endsection
