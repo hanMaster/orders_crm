@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\BuildObject;
 use App\Ed;
 use App\Log;
+use App\Notifications\CommentAdded;
 use App\Order;
 use App\OrderComment;
 use App\OrderDetail;
+use App\Services\NotifSender;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -193,6 +196,13 @@ class OrderController extends Controller
         $comment->user_id = Auth::user()->id;
         $comment->comment = $request->comment;
         $comment->save();
+
+        (new NotifSender())->send($order);
+
+
+//        $user->notify(new CommentAdded($order, $comment->comment));
+
+
         if (Auth::user()->role_id == Config::get('role.executor')){
             return redirect('/execute/'. $order->id);
         }
