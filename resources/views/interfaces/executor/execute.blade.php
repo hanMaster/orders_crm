@@ -33,7 +33,7 @@
                         <th style="width: 81px;">Ед. изм.</th>
                         <th style="width: 75px;">Кол-во</th>
                         <th style="width: 130px;">Дата план</th>
-                        <th style="width: 130px;">Дата факт</th>
+                        <th style="width: 130px;">Дата исполнения</th>
                         <th style="width: 130px;">
                             <div class="dropdown">
                                 <a class="dropdown-toggle"

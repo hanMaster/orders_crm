@@ -23,7 +23,7 @@ class OrderDetail extends Model
     }
 
     public function logs(){
-        return $this->hasMany(Log::class, 'subject_id')->where('isLine', true);
+        return $this->hasMany(Log::class, 'subject_id')->where('isLine', true)->orderBy('created_at', 'desc');
     }
 
     public function status(){

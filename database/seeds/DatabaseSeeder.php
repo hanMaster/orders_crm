@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
         Status::create(['status' => 'executor', 'name' => 'В процессе исполнения']);
         Status::create(['status' => 'exec_done', 'name' => 'Исполнена']);
         Status::create(['status' => 'partial_done', 'name' => 'Частично исполнена']);
+        Status::create(['status' => 'rejected', 'name' => 'Не исполнена']);
     }
 
     public function fillLineStatuses()

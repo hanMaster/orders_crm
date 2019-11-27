@@ -11,5 +11,6 @@ return [
     'main_executor'     => 8,
     'executor'          => 9,
     'exec_done'         => 10,
-    'partial_done'      => 11
+    'partial_done'      => 11,
+    'rejected'          => 12
 ];

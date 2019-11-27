@@ -29,16 +29,20 @@ class OrderDetailObserver
      */
     public function updated(OrderDetail $orderDetail)
     {
-        $cntPartialDone = $orderDetail->order->items->where('line_status_id',Config::get('lineStatus.not_deliverable'))->count();
+        $cntRejected = $orderDetail->order->items->where('line_status_id',Config::get('lineStatus.not_deliverable'))->count();
         $cntDone = $orderDetail->order->items->whereIn('line_status_id',[Config::get('lineStatus.not_deliverable'),Config::get('lineStatus.done')])->count();
         $cntAll = $orderDetail->order->items->count();
         if ($cntAll == $cntDone){
             $orderDetail->order->status_id = Config::get('status.exec_done');
             $message = "Заявка <strong>Исполнена</strong>";
-            if ($cntPartialDone > 0){
+            if ($cntRejected == $cntAll){
+                $orderDetail->order->status_id = Config::get('status.rejected');
+                $message = "Заявка <strong>Не исполнена</strong>";
+            }else{
                 $orderDetail->order->status_id = Config::get('status.partial_done');
                 $message = "Заявка <strong>Частично исполнена</strong>";
             }
+
             $orderDetail->order->save();
             Log::create([
                 'subject_id' => $orderDetail->order->id,

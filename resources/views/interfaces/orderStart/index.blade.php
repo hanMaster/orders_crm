@@ -35,7 +35,7 @@
 
                                     @endif
                                     >
-                                    {{$loop->iteration}}. {{$order->bo->name??''}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
+                                    {{$loop->iteration}}. {{$order->bo->name??''}} - {{$order->name}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
                                     </a>
                                 </li>
                                 @endforeach
@@ -43,6 +43,7 @@
                         @endif
                     </div>
                 </div>
+                @include('layouts.include.ordersDone')
             </div>
         </div>
     </div>

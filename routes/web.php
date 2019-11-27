@@ -2,6 +2,9 @@
 
 Auth::routes();
 
+Route::post('/push','PushController@store')->middleware('auth');
+Route::get('/push','PushController@push')->name('push')->middleware('auth');
+
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('users/{user}/edit', 'UserController@edit')->middleware('auth');

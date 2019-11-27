@@ -12,7 +12,7 @@
                             <ul>
                                 @foreach($orders as $order)
                                     <li>
-                                        @if($order->status_id === \Illuminate\Support\Facades\Config::get('status.approved')||$order->status_id === \Illuminate\Support\Facades\Config::get('status.executor'))
+                                        @if($order->status_id == \Illuminate\Support\Facades\Config::get('status.approved')||$order->status_id == \Illuminate\Support\Facades\Config::get('status.executor'))
                                             <a href="{{url("exec/". $order->id . '/assign')}}"
                                         @else
                                             <a href="{{url("order/". $order->id )}}"
@@ -25,10 +25,11 @@
                                                style="color: #a7131d;"
                                                @elseif ($order->status_id == \Illuminate\Support\Facades\Config::get('status.executor'))
                                                style="color: #2e64a7;"
-
+                                               @elseif ($order->status_id == \Illuminate\Support\Facades\Config::get('status.rejected'))
+                                               style="color: #a76f08;"
                                                 @endif
                                             >
-                                                {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
+                                                {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>
                                 @endforeach
@@ -36,6 +37,25 @@
                         @endif
                     </div>
                 </div>
+                <div class="card mt-5">
+                    <div class="card-header">
+                        Исполненные заявки
+                    </div>
+                    <div class="card-body">
+                        @if (isset($ordersDone))
+                            <ul>
+                                @foreach($ordersDone as $order)
+                                    <li>
+                                        <a href="{{url("order/". $order->id )}}">
+                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

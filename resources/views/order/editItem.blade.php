@@ -25,7 +25,7 @@
                         @foreach($eds as $ed)
                             <option
                                 value="{{$ed->id}}"
-                                @if($item->ed_id === $ed->id) selected='selected' @endif
+                                @if($item->ed_id == $ed->id) selected='selected' @endif
                             >{{$ed->name}}</option>
                         @endforeach
                     </select>
@@ -39,6 +39,7 @@
                         id="Input_quantity"
                         name="quantity"
                         type="number"
+                        step="0.1"
                         value="{{$item->quantity}}"
                     >
                 </div>

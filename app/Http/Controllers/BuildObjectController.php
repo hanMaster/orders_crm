@@ -93,8 +93,8 @@ class BuildObjectController extends Controller
         ]);
 
         $bo->name = $request->name;
-        $request->approve_id==='null' ? $bo->approve_id = NULL: $bo->approve_id = $request->approve_id;
-        $request->starter_id==='null' ? $bo->starter_id = NULL: $bo->starter_id = $request->starter_id;
+        $request->approve_id=='null' ? $bo->approve_id = NULL: $bo->approve_id = $request->approve_id;
+        $request->starter_id=='null' ? $bo->starter_id = NULL: $bo->starter_id = $request->starter_id;
 
         $bo->save();
 

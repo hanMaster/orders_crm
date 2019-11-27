@@ -35,7 +35,7 @@ class Order extends Model
     }
 
     public function logs(){
-        return $this->hasMany(Log::class, 'subject_id')->where('isLine', false);
+        return $this->hasMany(Log::class, 'subject_id')->where('isLine', false)->orderBy('created_at', 'desc');
     }
 
 }

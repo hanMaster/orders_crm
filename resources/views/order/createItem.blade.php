@@ -40,6 +40,7 @@
                         id="Input_quantity"
                         name="quantity"
                         type="number"
+                        step="0.1"
                         value="{{old('quantity')??1}}"
                     >
                 </div>

@@ -15,9 +15,9 @@
             <label for="">Роль</label>
             <select name="role_id" class="form-control">
                 <option disabled>Выберите роль</option>
-                <option value="0" @if($user->role_id === 0) selected='selected' @endif>Роль не назначена</option>
+                <option value="0" @if($user->role_id == 0) selected='selected' @endif>Роль не назначена</option>
                 @foreach($roles as $role)
-                <option value="{{$role->id}}" @if($user->role_id === $role->id) selected='selected' @endif>{{$role->name}}</option>
+                <option value="{{$role->id}}" @if($user->role_id == $role->id) selected='selected' @endif>{{$role->name}}</option>
                 @endforeach
             </select>
         </div>

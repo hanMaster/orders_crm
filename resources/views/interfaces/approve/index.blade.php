@@ -24,7 +24,7 @@
 
                                             @endif
                                         >
-                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
+                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>
                                 @endforeach
@@ -49,10 +49,12 @@
                                            style="color: #a7131d;"
                                            @elseif ($order->status_id == \Illuminate\Support\Facades\Config::get('status.executor'))
                                            style="color: #2e64a7;"
+                                           @elseif ($order->status_id == \Illuminate\Support\Facades\Config::get('status.rejected'))
+                                           style="color: #a76f08;"
 
                                             @endif
                                         >
-                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{$order->created_at}} - статус: {{$order->status->name}}
+                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>
                                 @endforeach

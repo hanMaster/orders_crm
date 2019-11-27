@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container">
+    <a href="{{route('push')}}" class="btn btn-outline-primary btn-block">Make a Push Notification!</a>
     <div class="row">
         <div class="col-md-8">
             <div class="d-flex justify-content-between p-1">

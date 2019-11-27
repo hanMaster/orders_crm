@@ -22,12 +22,12 @@
     <link href="{{ asset('css/print.css') }}" rel="stylesheet" media="print">
 </head>
 <body
-    @guest
-    @else
-    @if (auth()->user()->email == "kokoreva.kfk@gmail.com")
-    style="background-image: url('{{asset('/bg/beauty.jpg')}}');"
-    @endif
-    @endguest
+{{--    @guest--}}
+{{--    @else--}}
+{{--    @if (auth()->user()->email == "kokoreva.kfk@gmail.com")--}}
+{{--    style="background-image: url('{{asset('/bg/beauty.jpg')}}');"--}}
+{{--    @endif--}}
+{{--    @endguest--}}
 >
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
@@ -86,5 +86,8 @@
     </div>
 </div>
 @yield('js')
+@auth
+    <script src="{{ asset('js/enable-push.js') }}" defer></script>
+@endauth
 </body>
 </html>

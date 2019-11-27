@@ -161,7 +161,10 @@ class OrderController extends Controller
     }
 
     public function starterEdit(Order $order){
-        $order->status_id = Config::get('status.editing');
+        if ($order->status_id == Config::get('status.new')){
+            $order->status_id = Config::get('status.editing');
+        }
+
         $order->save();
         return $this->edit($order);
     }
@@ -190,11 +193,10 @@ class OrderController extends Controller
         $comment->user_id = Auth::user()->id;
         $comment->comment = $request->comment;
         $comment->save();
-        if (Auth::user()->role_id === Config::get('role.executor')){
+        if (Auth::user()->role_id == Config::get('role.executor')){
             return redirect('/execute/'. $order->id);
         }
         return redirect('/order/'. $order->id);
-
     }
 
     public function startApprove(Order $order){

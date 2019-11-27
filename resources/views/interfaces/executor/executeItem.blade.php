@@ -17,7 +17,7 @@
             <th style="width: 81px;">Ед. изм.</th>
             <th style="width: 75px;">Кол-во</th>
             <th style="width: 130px;">Дата план</th>
-            <th style="width: 130px;">Дата факт</th>
+            <th style="width: 130px;">Дата исполнения</th>
             <th style="width: 130px;">Статус</th>
             <th style="width: 200px;">Примечание</th>
         </tr>
@@ -62,7 +62,10 @@
                     <label for="status">Изменить статус</label>
                     <select name="status" id="status" class="form-control">
                         @foreach($line_statuses as $status)
-                            <option value="{{$status->id}}">{{$status->name}}</option>
+                            <option value="{{$status->id}}"
+                                    @if($status->id == $item->line_status_id) selected='selected' @endif
+                            >{{$status->name}}</option>
+
                         @endforeach
                     </select>
                 </div>

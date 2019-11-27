@@ -56,7 +56,7 @@ class ExecutionController extends Controller
 
     public function executeItem(OrderDetail $item, Request $request){
         $request->validate([
-            'date_fact' => 'date|after:today'
+            'date_fact' => 'date|after:yesterday'
         ]);
 
         if($item->line_status_id != $request->status){
@@ -87,9 +87,9 @@ class ExecutionController extends Controller
 
     public function print(Order $order, Request $request){
         if(isset($request->items)){
-            $items = OrderDetail::whereIn('idx', array_keys($request->items))->get();
+            $items = $order->execItems->whereIn('idx', array_keys($request->items));
         }else{
-            $item = $order->execItems;
+            $items = $order->execItems;
         }
         return view('interfaces.executor.print', compact(['order','items']));
     }
