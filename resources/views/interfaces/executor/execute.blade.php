@@ -29,7 +29,7 @@
                     <thead class="thead-dark">
                     <tr>
                         <th style="width: 60px;">№</th>
-                        <th>Наименование материала</th>
+                        <th style="width: 250px;">Наименование материала</th>
                         <th style="width: 81px;">Ед. изм.</th>
                         <th style="width: 75px;">Кол-во</th>
                         <th style="width: 130px;">Дата план</th>

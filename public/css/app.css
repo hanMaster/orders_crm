@@ -11222,3 +11222,17 @@ a:hover {
   }
 }
 
+@media (max-width: 400px) {
+  h3,
+  h4 {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 401px) and (max-width: 570px) {
+  h3,
+  h4 {
+    font-size: 1.1rem;
+  }
+}
+

@@ -20,7 +20,7 @@
         <thead class="thead-dark">
         <tr>
             <th style="width: 50px;">№</th>
-            <th>Наименование материала</th>
+            <th style="width: 250px;">Наименование материала</th>
             <th style="width: 100px;">Ед. изм.</th>
             <th style="width: 100px;">Кол-во</th>
             <th style="width: 150px;">Дата поставки</th>
