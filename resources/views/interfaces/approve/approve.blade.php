@@ -12,15 +12,17 @@
             <p>Объект: {{$order->bo->name}}</p>
             <p>Создатель: {{$order->starter->name}}</p>
         </div>
-
-        <a href="{{url("order/".$order->id."/edit")}}">Редактировать заявку</a>
+        <div class="d-flex flex-md-column">
+            <a href="{{url("order/".$order->id."/edit")}}" class="d-block btn btn-danger mb-2">Редактировать заявку</a>
+            <a href="{{url("print/".$order->id)}}" class="btn btn-primary mb-2">Печать заявки</a>
+        </div>
     </div>
 
     <table class="table table-striped table-bordered">
         <thead class="thead-dark">
         <tr>
             <th style="width: 50px;">№</th>
-            <th style="width: 250px;">Наименование материала</th>
+            <th style="width: 500px;">Наименование материала</th>
             <th style="width: 100px;">Ед. изм.</th>
             <th style="width: 100px;">Кол-во</th>
             <th style="width: 150px;">Дата поставки</th>

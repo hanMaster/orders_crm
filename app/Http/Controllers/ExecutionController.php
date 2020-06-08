@@ -91,6 +91,6 @@ class ExecutionController extends Controller
         }else{
             $items = $order->execItems;
         }
-        return view('interfaces.executor.print', compact(['order','items']));
+        return view('interfaces.common.print', compact(['order','items']));
     }
 }

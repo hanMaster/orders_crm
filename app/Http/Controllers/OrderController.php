@@ -20,17 +20,18 @@ use Illuminate\Support\Facades\Storage;
 class OrderController extends Controller
 {
 
-    public function create(){
+    public function create()
+    {
         $starter_id = auth()->id();
-        $order = Order::where(['status_id' => Config::get('status.creating'), 'starter_id'=>$starter_id])->first();
+        $order = Order::where(['status_id' => Config::get('status.creating'), 'starter_id' => $starter_id])->first();
 
-        if (!$order){
-            $order = Order::create(['status_id' => Config::get('status.creating'), 'starter_id'=>$starter_id, 'name' => '']);
+        if (!$order) {
+            $order = Order::create(['status_id' => Config::get('status.creating'), 'starter_id' => $starter_id, 'name' => '']);
         }
 
-        if(!$order->object_id){
+        if (!$order->object_id) {
             $objs = BuildObject::all();
-            return view('order.create', compact(['order','objs']));
+            return view('order.create', compact(['order', 'objs']));
         }
 
         $eds = Ed::all();
@@ -38,7 +39,8 @@ class OrderController extends Controller
         return view('order.create', compact(['order', 'eds']));
     }
 
-    public function setNameObject(Order $order, Request $request){
+    public function setNameObject(Order $order, Request $request)
+    {
         $request->validate([
             'object_id' => 'required|numeric',
             'name' => 'required|min:2'
@@ -50,7 +52,8 @@ class OrderController extends Controller
     }
 
 
-    public function addItemFromCreate(Request $request){
+    public function addItemFromCreate(Request $request)
+    {
         $request->validate([
             'item' => 'required',
             'quantity' => 'required|numeric|gt:0',
@@ -61,13 +64,13 @@ class OrderController extends Controller
         ]);
 
         $filePath = null;
-        if ($request->hasFile('attached_file')){
+        if ($request->hasFile('attached_file')) {
             $filePath = $request->attached_file->store('orders', 'public');
         }
 
         $od = OrderDetail::create([
-            'order_item'=>$request->item,
-            'order_id'=>$request->order_id,
+            'order_item' => $request->item,
+            'order_id' => $request->order_id,
             'ed_id' => $request->ed_id,
             'quantity' => $request->quantity,
             'date_plan' => $request->date_plan,
@@ -84,7 +87,8 @@ class OrderController extends Controller
         return back();
     }
 
-    public function addItemFromEdit(Request $request, Order $order){
+    public function addItemFromEdit(Request $request, Order $order)
+    {
         $request->validate([
             'item' => 'required',
             'order_id' => 'required|numeric',
@@ -95,13 +99,13 @@ class OrderController extends Controller
         ]);
 
         $filePath = null;
-        if ($request->hasFile('attached_file')){
+        if ($request->hasFile('attached_file')) {
             $filePath = $request->attached_file->store('orders', 'public');
         }
 
         $od = OrderDetail::create([
-            'order_item'=>$request->item,
-            'order_id'=>$order->id,
+            'order_item' => $request->item,
+            'order_id' => $order->id,
             'ed_id' => $request->ed_id,
             'quantity' => $request->quantity,
             'date_plan' => $request->date_plan,
@@ -121,13 +125,14 @@ class OrderController extends Controller
         return $this->edit($order);
     }
 
-    public function store(Request $request){
-        $order = Order::where('id',$request->order_id)->first();
+    public function store(Request $request)
+    {
+        $order = Order::where('id', $request->order_id)->first();
 
-        if ($order->status_id == Config::get('status.not_approved')){
+        if ($order->status_id == Config::get('status.not_approved')) {
             $order->status_id = Config::get('status.re_approve');
             $message = "Заявка переведена в статус <strong>Для повторного согласования</strong>";
-        }else{
+        } else {
             $order->status_id = Config::get('status.new');
             $message = "Заявка переведена в статус <strong>Новая</strong>";
         }
@@ -147,8 +152,9 @@ class OrderController extends Controller
         return redirect('/');
     }
 
-    public function reApprove(Order $order){
-        if($order){
+    public function reApprove(Order $order)
+    {
+        if ($order) {
             $order->status_id = Config::get('status.re_approve');
             $order->save();
             Log::create([
@@ -163,8 +169,9 @@ class OrderController extends Controller
         return redirect('/');
     }
 
-    public function starterEdit(Order $order){
-        if ($order->status_id == Config::get('status.new')){
+    public function starterEdit(Order $order)
+    {
+        if ($order->status_id == Config::get('status.new')) {
             $order->status_id = Config::get('status.editing');
         }
 
@@ -173,20 +180,24 @@ class OrderController extends Controller
     }
 
 
-    public function edit(Order $order){
+    public function edit(Order $order)
+    {
         $eds = Ed::all();
         return view('order.edit', compact(['order', 'eds']));
     }
 
-    public function show(Order $order){
+    public function show(Order $order)
+    {
         return view('order.show', compact(['order']));
     }
 
-    public function addComment(Order $order){
+    public function addComment(Order $order)
+    {
         return view('order.addComment', compact('order'));
     }
 
-    public function storeComment(Order $order, Request $request){
+    public function storeComment(Order $order, Request $request)
+    {
         $request->validate([
             'comment' => 'required|min:2',
         ]);
@@ -203,26 +214,28 @@ class OrderController extends Controller
 //        $user->notify(new CommentAdded($order, $comment->comment));
 
 
-        if (Auth::user()->role_id == Config::get('role.executor')){
-            return redirect('/execute/'. $order->id);
+        if (Auth::user()->role_id == Config::get('role.executor')) {
+            return redirect('/execute/' . $order->id);
         }
-        return redirect('/order/'. $order->id);
+        return redirect('/order/' . $order->id);
     }
 
-    public function startApprove(Order $order){
+    public function startApprove(Order $order)
+    {
         $order->status_id = Config::get('status.approve_in_process');
         $order->save();
         return view('interfaces.approve.approve', compact('order'));
     }
 
-    public function makeApprove(Order $order, Request $request){
+    public function makeApprove(Order $order, Request $request)
+    {
         $request->validate([
             'approved' => 'required',
         ]);
-        if ($request->approved == 'on'){
+        if ($request->approved == 'on') {
             $order->status_id = Config::get('status.approved');
             $message = "Заявка переведена в статус <strong>Согласована</strong>";
-        }else{
+        } else {
             $order->status_id = Config::get('status.not_approved');
             $message = "Заявка переведена в статус <strong>Не согласована</strong>";
         }
@@ -237,7 +250,7 @@ class OrderController extends Controller
         $order->save();
 
 
-        if (isset($request->comment)){
+        if (isset($request->comment)) {
             $comment = new OrderComment();
             $comment->order_id = $order->id;
             $comment->user_id = Auth::user()->id;
@@ -247,26 +260,30 @@ class OrderController extends Controller
         return redirect('/');
     }
 
-    public function destroyItem(OrderDetail $item, Request $request){
+    public function destroyItem(OrderDetail $item, Request $request)
+    {
         if ($item->attached_file) {
-            Storage::delete("/public/".$item->attached_file);
+            Storage::delete("/public/" . $item->attached_file);
         }
         $item->delete();
-        return redirect(url('/order/'.$request->order_id.'/edit'));
+        return redirect(url('/order/' . $request->order_id . '/edit'));
     }
 
 
-    public function createItem(Order $order){
+    public function createItem(Order $order)
+    {
         $eds = Ed::all();
         return view('order.createItem', compact(['order', 'eds']));
     }
 
-    public function editItem(Order $order, OrderDetail $item){
+    public function editItem(Order $order, OrderDetail $item)
+    {
         $eds = Ed::all();
-        return view('order.editItem', compact(['order','item', 'eds']));
+        return view('order.editItem', compact(['order', 'item', 'eds']));
     }
 
-    public function updateItem(Order $order, OrderDetail $item, Request $request){
+    public function updateItem(Order $order, OrderDetail $item, Request $request)
+    {
         $request->validate([
             'item' => 'required',
             'quantity' => 'required|gt:0',
@@ -275,8 +292,8 @@ class OrderController extends Controller
             'date_plan' => 'date|after:today'
         ]);
 
-        if ($request->hasFile('attached_file')){
-            Storage::delete("/public/".$item->attached_file);
+        if ($request->hasFile('attached_file')) {
+            Storage::delete("/public/" . $item->attached_file);
             $item->attached_file = $request->attached_file->store('orders', 'public');
         }
 
@@ -298,5 +315,10 @@ class OrderController extends Controller
         return $this->edit($order);
     }
 
-
+    public function print(Order $order)
+    {
+//        $items = $order->items;
+//        return view('interfaces.common.print', compact(['order', 'items']));
+        return view('interfaces.common.print', compact(['order']));
+    }
 }

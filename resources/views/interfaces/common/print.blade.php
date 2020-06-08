@@ -8,7 +8,7 @@
         <thead class="thead-dark">
         <tr>
             <th style="width: 50px;">№</th>
-            <th>Наименование материала</th>
+            <th style="width: 200px;">Наименование материала</th>
             <th style="width: 81px;">Ед. изм.</th>
             <th style="width: 75px;">Кол-во</th>
             <th style="width: 200px;">Примечание</th>
@@ -26,6 +26,8 @@
         @endforeach
         </tbody>
     </table>
+
+    <button class="btn btn-info" onclick="window.print()">Печать</button>
 
 @endsection
 
