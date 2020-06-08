@@ -13,57 +13,57 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/vendor/pdf.worker.js';
 
 //Render page
 const renderPage = num => {
-  pageIsRendering = true
-  //Get Page
-  pdfDoc.getPage(num).then(page => {
-    //Set Scale
-    const viewport = page.getViewport({scale})
-    canvas.height = viewport.height
-    canvas.width = viewport.width
+    pageIsRendering = true
+    //Get Page
+    pdfDoc.getPage(num).then(page => {
+        //Set Scale
+        const viewport = page.getViewport({scale})
+        canvas.height = viewport.height
+        canvas.width = viewport.width
 
-    const renderCtx = {
-      canvasContext: ctx,
-      viewport
-    }
+        const renderCtx = {
+            canvasContext: ctx,
+            viewport
+        }
 
-    page.render(renderCtx).promise.then(() => {
-      pageIsRendering = false
-      if (pageNumIsPending !== null) {
-        renderPage(pageNumIsPending)
-        pageNumIsPending = null
-      }
+        page.render(renderCtx).promise.then(() => {
+            pageIsRendering = false
+            if (pageNumIsPending !== null) {
+                renderPage(pageNumIsPending)
+                pageNumIsPending = null
+            }
+        })
+
+        //Output current page number
+        document.getElementById('page-num').textContent = num
     })
-
-    //Output current page number
-    document.getElementById('page-num').textContent = num
-  })
 }
 
 //Check for pages rendering
 const queueRenderPage = num => {
-  if (pageIsRendering) {
-    pageNumIsPending = num
-  } else {
-    renderPage(num)
-  }
+    if (pageIsRendering) {
+        pageNumIsPending = num
+    } else {
+        renderPage(num)
+    }
 }
 
 //Show prev page
 const showPrevPage = () => {
-  if (pageNum <= 1) {
-    return
-  }
-  pageNum--
-  queueRenderPage(pageNum)
+    if (pageNum <= 1) {
+        return
+    }
+    pageNum--
+    queueRenderPage(pageNum)
 }
 
 //Show next page
 const showNextPage = () => {
-  if (pageNum >= pdfDoc.numPages) {
-    return
-  }
-  pageNum++
-  queueRenderPage(pageNum)
+    if (pageNum >= pdfDoc.numPages) {
+        return
+    }
+    pageNum++
+    queueRenderPage(pageNum)
 }
 
 //Load document
@@ -73,14 +73,14 @@ const loadDocument = () => {
 
     //Get Document
     pdfjsLib.getDocument(uri).promise
-      .then(
-        pdfDoc_ => {
-          pdfDoc = pdfDoc_
-          document.getElementById('page-count').textContent = pdfDoc.numPages
+        .then(
+            pdfDoc_ => {
+                pdfDoc = pdfDoc_
+                document.getElementById('page-count').textContent = pdfDoc.numPages
 
-          renderPage(pageNum)
-        }
-      )
+                renderPage(pageNum)
+            }
+        )
 }
 
 

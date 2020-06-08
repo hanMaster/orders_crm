@@ -177,8 +177,6 @@
             }
         };
         const dropSingleClick = (item_id, exec_id) => {
-            console.log('item: ', item_id);
-            console.log("exec: ", exec_id);
             event.preventDefault();
             document.querySelector('#single_exec_input').value = exec_id;
             document.querySelector('#item_id').value = item_id;
