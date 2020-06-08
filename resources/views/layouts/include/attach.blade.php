@@ -1,7 +1,7 @@
 @if ($item->attached_file)
     <!-- Button trigger modal -->
     <a href="#" data-toggle="modal" data-target="{{"#item". $item->id}}">
-        Изображение
+        Файл
     </a>
     <!-- Modal -->
     <div class="modal fade" id="{{"item". $item->id}}" tabindex="-1" role="dialog" aria-labelledby="{{"item". $item->id."Label"}}"
@@ -15,7 +15,25 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    @if(substr($item->attached_file, -3) != "pdf")
                     <img src="{{"/storage/".$item->attached_file}}" alt="file" style="width: 100%;" class="print">
+                    @else
+                        <div class="top-bar">
+                            <button class="btn-pdf" id="show_pdf">
+                                Просмотреть
+                            </button>
+                            <button class="btn-pdf" id="prev_page">
+                                <i class="fas fa-arrow-circle-left"></i>
+                            </button>
+                            <button class="btn-pdf" id="next_page">
+                                <i class="fas fa-arrow-circle-right"></i>
+                            </button>
+                            <span class="page-info">
+                                Страница <span id="page-num"></span> из <span id="page-count"></span>
+                            </span>
+                        </div>
+                        <canvas id="pdf-render" data-src = "{{"/storage/".$item->attached_file}}"></canvas>
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <a href="{{"/storage/".$item->attached_file}}" download class="btn btn-outline-info">Скачать</a>

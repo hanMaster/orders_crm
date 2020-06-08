@@ -11217,7 +11217,7 @@ a:hover {
 
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: 900px;
+    max-width: 930px;
     margin: 1.75rem auto;
   }
 }

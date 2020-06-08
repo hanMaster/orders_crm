@@ -55,7 +55,7 @@ class OrderController extends Controller
             'item' => 'required',
             'quantity' => 'required|numeric|gt:0',
             'ed_id' => 'required|numeric|gt:0',
-            'attached_file' => 'image|max:1000',
+            'attached_file' => 'mimes:pdf,jpg,jpeg,png|max:5120',
             'comment' => 'max:190',
             'date_plan' => 'date|after:today'
         ]);
@@ -89,7 +89,7 @@ class OrderController extends Controller
             'item' => 'required',
             'order_id' => 'required|numeric',
             'quantity' => 'required|gt:0',
-            'attached_file' => 'image|max:1000',
+            'attached_file' => 'mimes:pdf,jpg,jpeg,png|max:5120',
             'comment' => 'max:190',
             'date_plan' => 'date|after:today'
         ]);

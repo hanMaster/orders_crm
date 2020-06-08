@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         Status::create(['status' => 'executor', 'name' => 'В процессе исполнения']);
         Status::create(['status' => 'exec_done', 'name' => 'Исполнена']);
         Status::create(['status' => 'partial_done', 'name' => 'Частично исполнена']);
-        Status::create(['status' => 'rejected', 'name' => 'Не исполнена']);
+        Status::create(['status' => 'rejected', 'name' => 'Отменена']);
     }
 
     public function fillLineStatuses()
@@ -81,15 +81,6 @@ class DatabaseSeeder extends Seeder
                 'role_id' => \Illuminate\Support\Facades\Config::get('role.starter')
         ]);
         User::create([
-            'name' => 'Нагорный Роман',
-            'email' => '2@2.com',
-            'email_verified_at' => now(),
-            'password' => bcrypt('1qaz2wsx'), // password
-            'remember_token' => Str::random(10),
-            'phone' => '123456789',
-            'role_id' => \Illuminate\Support\Facades\Config::get('role.approve')
-        ]);
-        User::create([
             'name' => 'Зубарев Алексей',
             'email' => '3@3.com',
             'email_verified_at' => now(),
@@ -125,6 +116,9 @@ class DatabaseSeeder extends Seeder
         Ed::create(['name' => 'кг']);
         Ed::create(['name' => 'шт']);
         Ed::create(['name' => 'л']);
+        Ed::create(['name' => 'куб']);
+        Ed::create(['name' => 'кв. м']);
+        Ed::create(['name' => 'пог. м']);
     }
 
 

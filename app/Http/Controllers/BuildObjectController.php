@@ -74,6 +74,7 @@ class BuildObjectController extends Controller
     {
         $starters = User::where('role_id', 1)->get();
         $approves = User::where('role_id', 2)->get();
+
         return view('bo.edit', compact(['bo','starters', 'approves']));
     }
 

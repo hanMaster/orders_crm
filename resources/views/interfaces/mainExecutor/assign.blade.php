@@ -16,6 +16,10 @@
             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history"
                aria-selected="false">История изменений</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="reject-tab" data-toggle="tab" href="#reject" role="tab" aria-controls="reject"
+               aria-selected="false">Отмена заявки</a>
+        </li>
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="items" role="tabpanel" aria-labelledby="items-tab">
@@ -128,6 +132,11 @@
                         - {{$log->user->name}}</li>
                 @endforeach
             </ul>
+        </div>
+        <div class="tab-pane fade" id="reject" role="tabpanel" aria-labelledby="reject-tab">
+
+            <h2 class="mt-3">Отмена заявки</h2>
+            <button class="btn btn-danger">Отменить заявку</button>
         </div>
     </div>
 

@@ -32,7 +32,7 @@
                 @foreach($approves as $approve)
                     <option
                         value="{{$approve->id}}"
-                        @if($bo->approve_id === $approve->id)
+                        @if($bo->approve_id == $approve->id)
                             selected='selected'
                         @endif
                     >{{$approve->name}}</option>
