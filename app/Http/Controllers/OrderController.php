@@ -136,6 +136,7 @@ class OrderController extends Controller
             $order->status_id = Config::get('status.new');
             $message = "Заявка переведена в статус <strong>Новая</strong>";
         }
+        $order->save();
         $order->created_at = $order->updated_at;
         $order->save();
 
@@ -317,8 +318,15 @@ class OrderController extends Controller
 
     public function print(Order $order)
     {
-//        $items = $order->items;
-//        return view('interfaces.common.print', compact(['order', 'items']));
         return view('interfaces.common.print', compact(['order']));
+    }
+
+    public function reject(Order $order)
+    {
+        try {
+            $order->delete();
+        } catch (\Exception $e) {
+        }
+        return redirect('/');
     }
 }

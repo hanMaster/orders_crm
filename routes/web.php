@@ -50,7 +50,12 @@ Route::patch('exec-single', 'ExecutionController@assignSingleStore')->middleware
 Route::get('execute/{order}', 'ExecutionController@execute')->middleware('auth');
 Route::patch('execute/{item}', 'ExecutionController@executeItem')->middleware('auth');
 Route::patch('items-status-change/{order}', 'ExecutionController@itemsStatusChange')->middleware('auth');
-Route::get('print/{order}', 'OrderController@print')->middleware('auth');
 Route::post('print/{order}', 'ExecutionController@print')->middleware('auth');
 
 Route::get('execute/{order}/item/{item}', 'ExecutionController@getExecuteItem')->middleware('auth');
+
+//print order
+Route::get('print/{order}', 'OrderController@print')->middleware('auth');
+
+//Reject order
+Route::get('reject/{order}', 'OrderController@reject')->middleware('auth');

@@ -136,7 +136,7 @@
         <div class="tab-pane fade" id="reject" role="tabpanel" aria-labelledby="reject-tab">
 
             <h2 class="mt-3">Отмена заявки</h2>
-            <button class="btn btn-danger">Отменить заявку</button>
+            <a class="btn btn-danger" onclick="reject({{$order->id}})" href="#">Отменить заявку</a>
         </div>
     </div>
 
@@ -175,7 +175,7 @@
             if (confirm('Назначить исполнителя на всю заявку?')) {
                 document.getElementById('mass-assign-form').submit();
             }
-        }
+        };
         const dropSingleClick = (item_id, exec_id) => {
             console.log('item: ', item_id);
             console.log("exec: ", exec_id);
@@ -183,7 +183,17 @@
             document.querySelector('#single_exec_input').value = exec_id;
             document.querySelector('#item_id').value = item_id;
             document.getElementById('single-assign-form').submit();
-        }
+        };
+
+        const reject = id => {
+            event.preventDefault();
+            if (confirm("Вы действительно хотите удалить эту заявку?")) {
+                fetch(`https://orders.kfkcom.ru/reject/${id}`,{
+                    credentials: 'same-origin',
+                })
+            }
+            window.location.assign('https://orders.kfkcom.ru/');
+        };
 
     </script>
 @endsection

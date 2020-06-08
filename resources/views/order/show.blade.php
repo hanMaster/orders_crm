@@ -17,6 +17,14 @@
             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history"
                aria-selected="false">История изменений</a>
         </li>
+
+        @if(auth()->user()->role_id == 3)
+
+        <li class="nav-item">
+            <a class="nav-link" id="reject-tab" data-toggle="tab" href="#reject" role="tab" aria-controls="reject"
+               aria-selected="false">Отмена заявки</a>
+        </li>
+        @endif
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="items" role="tabpanel" aria-labelledby="items-tab">
@@ -79,6 +87,15 @@
                 @endforeach
             </ul>
         </div>
+
+        @if(auth()->user()->role_id == 3)
+        <div class="tab-pane fade" id="reject" role="tabpanel" aria-labelledby="reject-tab">
+
+            <h2 class="mt-3">Отмена заявки</h2>
+            <a class="btn btn-danger" onclick="reject({{$order->id}})" href="#">Отменить заявку</a>
+        </div>
+        @endif
+
     </div>
 
 
@@ -136,4 +153,15 @@
     </script>
     <script src="/js/vendor/pdf.min.js"></script>
     <script src="/js/main.js"></script>
+    <script>
+        const reject = id => {
+            event.preventDefault();
+            if (confirm("Вы действительно хотите удалить эту заявку?")) {
+                fetch(`https://orders.kfkcom.ru/reject/${id}`,{
+                    credentials: 'same-origin',
+                })
+            }
+            window.location.assign('https://orders.kfkcom.ru/');
+        };
+    </script>
 @endsection

@@ -54,8 +54,12 @@ class HomeController extends Controller
                     ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
                     ->orderBy('updated_at', 'desc')->get();
 
-                $ordersAll = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', auth()->id()))
-                    ->orderBy('updated_at', 'desc')->get();
+                if (\auth()->id() == 7/* Шерстюк*/) {
+                    $ordersAll = Order::orderBy('updated_at', 'desc')->get();
+                } else {
+                    $ordersAll = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', auth()->id()))
+                        ->orderBy('updated_at', 'desc')->get();
+                }
 
                 return view('interfaces.approve.index', compact(['ordersToApprove', 'ordersAll']));
 //Main executor
