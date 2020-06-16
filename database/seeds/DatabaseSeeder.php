@@ -114,11 +114,13 @@ class DatabaseSeeder extends Seeder
     public function fillEds()
     {
         Ed::create(['name' => 'кг']);
+        Ed::create(['name' => 'тн']);
         Ed::create(['name' => 'шт']);
-        Ed::create(['name' => 'л']);
+        Ed::create(['name' => 'литр']);
+        Ed::create(['name' => 'галлон']);
         Ed::create(['name' => 'куб']);
         Ed::create(['name' => 'кв. м']);
-        Ed::create(['name' => 'пог. м']);
+        Ed::create(['name' => 'м.п.']);
     }
 
 

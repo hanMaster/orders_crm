@@ -101,6 +101,7 @@
 
     @if (auth()->user()->role_id == \Illuminate\Support\Facades\Config::get('role.starter')
             && ($order->status_id == \Illuminate\Support\Facades\Config::get('status.not_approved') ||
+            $order->status_id == \Illuminate\Support\Facades\Config::get('status.creating') ||
             $order->status_id == \Illuminate\Support\Facades\Config::get('status.new') ||
             $order->status_id == \Illuminate\Support\Facades\Config::get('status.editing')
             ))
