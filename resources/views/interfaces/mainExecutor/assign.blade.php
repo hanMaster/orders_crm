@@ -23,7 +23,7 @@
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="items" role="tabpanel" aria-labelledby="items-tab">
-
+            <a href="{{url("print/".$order->id)}}" class="btn btn-primary mb-3 mt-3">Печать заявки</a>
             <table class="table table-striped table-bordered">
                 <thead class="thead-dark">
                 <tr>

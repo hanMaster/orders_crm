@@ -13,7 +13,7 @@ class OrderDetailObserver
     /**
      * Handle the order detail "created" event.
      *
-     * @param  \App\OrderDetail  $orderDetail
+     * @param \App\OrderDetail $orderDetail
      * @return void
      */
     public function created(OrderDetail $orderDetail)
@@ -24,21 +24,21 @@ class OrderDetailObserver
     /**
      * Handle the order detail "updated" event.
      *
-     * @param  \App\OrderDetail  $orderDetail
+     * @param \App\OrderDetail $orderDetail
      * @return void
      */
     public function updated(OrderDetail $orderDetail)
     {
-        $cntRejected = $orderDetail->order->items->where('line_status_id',Config::get('lineStatus.not_deliverable'))->count();
-        $cntDone = $orderDetail->order->items->whereIn('line_status_id',[Config::get('lineStatus.not_deliverable'),Config::get('lineStatus.done')])->count();
+        $cntRejected = $orderDetail->order->items->where('line_status_id', Config::get('lineStatus.not_deliverable'))->count();
+        $cntDone = $orderDetail->order->items->whereIn('line_status_id', Config::get('lineStatus.done'))->count();
         $cntAll = $orderDetail->order->items->count();
-        if ($cntAll == $cntDone){
+        if ($cntAll == $cntDone) {
             $orderDetail->order->status_id = Config::get('status.exec_done');
             $message = "Заявка <strong>Исполнена</strong>";
-            if ($cntRejected == $cntAll){
+            if ($cntRejected == $cntAll) {
                 $orderDetail->order->status_id = Config::get('status.rejected');
                 $message = "Заявка <strong>Не исполнена</strong>";
-            }else{
+            } elseif ($cntAll == $cntDone + $cntRejected && $cntAll !== $cntDone) {
                 $orderDetail->order->status_id = Config::get('status.partial_done');
                 $message = "Заявка <strong>Частично исполнена</strong>";
             }
@@ -52,12 +52,12 @@ class OrderDetailObserver
             ]);
         }
 
-        if($orderDetail->line_status_id != $orderDetail->getOriginal('line_status_id')){
+        if ($orderDetail->line_status_id != $orderDetail->getOriginal('line_status_id')) {
             $ls = LineStatus::findOrFail($orderDetail->getOriginal('line_status_id'));
             Log::create([
                 'subject_id' => $orderDetail->id,
                 'user_id' => Auth::id(),
-                'message' => "Изменение статуса c <strong>".$ls->name."</strong> на <strong>".$orderDetail->status->name. "</strong>"
+                'message' => "Изменение статуса c <strong>" . $ls->name . "</strong> на <strong>" . $orderDetail->status->name . "</strong>"
             ]);
         };
 
@@ -66,7 +66,7 @@ class OrderDetailObserver
     /**
      * Handle the order detail "deleted" event.
      *
-     * @param  \App\OrderDetail  $orderDetail
+     * @param \App\OrderDetail $orderDetail
      * @return void
      */
     public function deleted(OrderDetail $orderDetail)
@@ -77,7 +77,7 @@ class OrderDetailObserver
     /**
      * Handle the order detail "restored" event.
      *
-     * @param  \App\OrderDetail  $orderDetail
+     * @param \App\OrderDetail $orderDetail
      * @return void
      */
     public function restored(OrderDetail $orderDetail)
@@ -88,7 +88,7 @@ class OrderDetailObserver
     /**
      * Handle the order detail "force deleted" event.
      *
-     * @param  \App\OrderDetail  $orderDetail
+     * @param \App\OrderDetail $orderDetail
      * @return void
      */
     public function forceDeleted(OrderDetail $orderDetail)

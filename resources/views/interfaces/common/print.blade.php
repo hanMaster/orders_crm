@@ -3,7 +3,7 @@
 @section('content')
 
     @include('layouts.include.header')
-
+    <button class="btn btn-info mb-3" onclick="window.print()">Печать</button>
     <table class="table table-striped table-bordered print">
         <thead class="thead-dark">
         <tr>
@@ -26,8 +26,6 @@
         @endforeach
         </tbody>
     </table>
-
-    <button class="btn btn-info" onclick="window.print()">Печать</button>
 
 @endsection
 

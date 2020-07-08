@@ -19,7 +19,6 @@
             <th style="width: 130px;">Дата план</th>
             <th style="width: 130px;">Дата исполнения</th>
             <th style="width: 130px;">Статус</th>
-            <th style="width: 200px;">Примечание</th>
         </tr>
         </thead>
         <tbody>
@@ -35,7 +34,6 @@
             <td>{{$item->date_plan}}</td>
             <td>{{$item->date_fact}}</td>
             <td>{{$item->status->name}}</td>
-            <td>{{$item->comment}}</td>
         </tr>
         </tbody>
     </table>
@@ -72,6 +70,26 @@
 
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="date_fact">Примечание</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="comment"
+                        name="comment"
+                        value="{{$item->comment}}"
+                    >
+                </div>
+
+
+
+            </div>
+        </div>
+
+
         <button type="submit" class="btn btn-outline-primary">Сохранить изменения</button>
         <a href="{{url('execute/'.$order->id)}}" class="btn btn-outline-secondary">Назад к списку</a>
     </form>

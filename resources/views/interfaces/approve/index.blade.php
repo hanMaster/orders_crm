@@ -24,7 +24,7 @@
 
                                             @endif
                                         >
-                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
+                                            {{$loop->iteration}}. {{$order->bo->name??''}} - {{$order->name??''}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>
                                 @endforeach
@@ -54,7 +54,7 @@
 
                                             @endif
                                         >
-                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
+                                            {{$loop->iteration}}. {{$order->bo->name??''}} - {{$order->name??''}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
                                         </a>
                                     </li>
                                 @endforeach

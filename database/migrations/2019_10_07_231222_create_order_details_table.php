@@ -21,7 +21,7 @@ class CreateOrderDetailsTable extends Migration
             $table->integer('idx')->nullable();
             $table->integer('ed_id');
             $table->double('quantity');
-            $table->string('comment')->nullable();
+            $table->text('comment')->nullable();
             $table->string('date_plan')->nullable();
             $table->string('date_fact')->nullable();
             $table->string('attached_file')->nullable();

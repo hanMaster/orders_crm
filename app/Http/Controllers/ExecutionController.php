@@ -64,6 +64,11 @@ class ExecutionController extends Controller
             $item->save();
         }
 
+        if($item->comment != $request->comment){
+            $item->comment = $request->comment;
+            $item->save();
+        }
+
         if($request->date_fact != $item->date_fact){
             $item->date_fact = $request->date_fact;
             $item->save();

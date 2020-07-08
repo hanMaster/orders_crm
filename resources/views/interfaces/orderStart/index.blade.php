@@ -23,7 +23,11 @@
                             <ul>
                                 @foreach($orders as $order)
                                 <li>
-                                    <a href="{{url("order/". $order->id)}}"
+                                    @if($order->status_id == \Illuminate\Support\Facades\Config::get('status.creating'))
+                                        <a href="{{route('order.create')}}"
+                                    @else
+                                        <a href="{{url("order/". $order->id)}}"
+                                    @endif
                                     @if($order->status_id == \Illuminate\Support\Facades\Config::get('status.new'))
                                     style="color: #1aa727;"
                                     @elseif ($order->status_id == \Illuminate\Support\Facades\Config::get('status.approved'))
@@ -35,7 +39,7 @@
 
                                     @endif
                                     >
-                                    {{$loop->iteration}}. {{$order->bo->name??''}} - {{$order->name}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
+                                    {{$loop->iteration}}. {{$order->bo->name??''}} - {{$order->name??''}} от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}} - статус: {{$order->status->name}}
                                     </a>
                                 </li>
                                 @endforeach

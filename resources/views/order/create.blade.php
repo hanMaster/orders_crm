@@ -28,6 +28,15 @@
         >
             @method('PATCH')
             @csrf
+            <div class="form-group">
+                <label for="object">Объект</label>
+                <select name="object_id" id="object" class="form-control">
+                    <option value="null" >Объект не выбран</option>
+                    @foreach($objs as $obj)
+                        <option value="{{$obj->id}}">{{$obj->name}}</option>
+                    @endforeach
+                </select>
+            </div>
 
             <div class="form-group">
                 <label for="name">Название заявки</label>
@@ -41,15 +50,6 @@
                 >
             </div>
 
-            <div class="form-group">
-                <label for="object">Объект</label>
-                <select name="object_id" id="object" class="form-control">
-                    <option value="null" >Объект не выбран</option>
-                    @foreach($objs as $obj)
-                        <option value="{{$obj->id}}">{{$obj->name}}</option>
-                    @endforeach
-                </select>
-            </div>
 
             <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
         </form>
