@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->integer('starter_id')->nullable();
             $table->integer('status_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

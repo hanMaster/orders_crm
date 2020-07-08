@@ -23,7 +23,7 @@
                     <tr>
                         <td>{{$user->name}}</td>
                         <td>{{$user->email}}</td>
-                        <td>{{$user->role['name']}}</td>
+                        <td>{{$user->role['name']??''}}</td>
                         <td class="text-right">
                             @include("layouts.include.password")
                             <a href="{{url('/users/'.$user->id.'/edit')}}" class="btn btn-sm btn-success">Изменить</a>
