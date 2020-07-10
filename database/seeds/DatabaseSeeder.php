@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
         ]);
         User::create([
                 'name' => 'Григорашенко Игорь',
-                'email' => '1@2.com',
+                'email' => 'g146@mail.ru',
                 'email_verified_at' => now(),
                 'password' => bcrypt('1qaz2wsx'), // password
                 'remember_token' => Str::random(10),
@@ -82,7 +82,7 @@ class DatabaseSeeder extends Seeder
         ]);
         User::create([
             'name' => 'Зубарев Алексей',
-            'email' => '3@3.com',
+            'email' => 'zubarevkfk@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('1qaz2wsx'), // password
             'remember_token' => Str::random(10),
@@ -91,7 +91,7 @@ class DatabaseSeeder extends Seeder
         ]);
         User::create([
             'name' => 'Слыщенко Алексей',
-            'email' => '4@4.com',
+            'email' => 'fesl@mail.ru',
             'email_verified_at' => now(),
             'password' => bcrypt('1qaz2wsx'), // password
             'remember_token' => Str::random(10),
@@ -100,12 +100,21 @@ class DatabaseSeeder extends Seeder
         ]);
         User::create([
             'name' => 'Кокорева Ольга',
-            'email' => '3@4.com',
+            'email' => 'kokoreva.kfk@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('1qaz2wsx'), // password
             'remember_token' => Str::random(10),
             'phone' => '123456789',
             'role_id' => \Illuminate\Support\Facades\Config::get('role.executor')
+        ]);
+        User::create([
+            'name' => 'Шерстюк Александр',
+            'email' => 'kfk.alex54@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('1qaz2wsx'), // password
+            'remember_token' => Str::random(10),
+            'phone' => '123456789',
+            'role_id' => \Illuminate\Support\Facades\Config::get('role.approve')
         ]);
     }
 
@@ -118,8 +127,8 @@ class DatabaseSeeder extends Seeder
         Ed::create(['name' => 'шт']);
         Ed::create(['name' => 'литр']);
         Ed::create(['name' => 'галлон']);
-        Ed::create(['name' => 'куб']);
-        Ed::create(['name' => 'кв. м']);
+        Ed::create(['name' => 'м&sup3;']);
+        Ed::create(['name' => 'м&sup2;']);
         Ed::create(['name' => 'м.п.']);
     }
 

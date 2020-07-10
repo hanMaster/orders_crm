@@ -79,7 +79,7 @@
                                         <option value="{{$ed->id}}"
                                             @if(old('ed_id') == $ed->id)
                                                     selected="selected"
-                                            @endif>{{$ed->name}}
+                                            @endif>{!!$ed->name!!}
                                         </option>
                                     @endforeach
                                 </select>
@@ -153,7 +153,7 @@
                                         {{$item->order_item}}
                                         @include('layouts.include.attach')
                                     </td>
-                                    <td>{{$item->ed->name}}</td>
+                                    <td>{!!$item->ed->name!!}</td>
                                     <td>{{$item->quantity}}</td>
                                     <td>{{$item->date_plan}}</td>
                                     <td>{{$item->comment}}</td>

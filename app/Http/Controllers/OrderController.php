@@ -133,8 +133,14 @@ class OrderController extends Controller
             $order->status_id = Config::get('status.re_approve');
             $message = "Заявка переведена в статус <strong>Для повторного согласования</strong>";
         } else {
-            $order->status_id = Config::get('status.new');
-            $message = "Заявка переведена в статус <strong>Новая</strong>";
+            //Заявки от Гаврилова принимаются без согласования
+            if (Auth::id() == 18) {
+                $order->status_id = Config::get('status.approved');
+                $message = "Заявка переведена в статус <strong>Согласована</strong>";
+            } else {
+                $order->status_id = Config::get('status.new');
+                $message = "Заявка переведена в статус <strong>Новая</strong>";
+            }
         }
         $order->save();
         $order->created_at = $order->updated_at;

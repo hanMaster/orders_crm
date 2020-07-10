@@ -27,13 +27,7 @@
                                 value="{{$ed->id}}"
                                 @if($item->ed_id == $ed->id) selected='selected' @endif
                             >
-                                @if($ed->name == "куб.м")
-                                    <span>м&sup3;</span>
-                                @elseif($ed->name == "кв.м")
-                                    <span>м&sup2;</span>
-                                @else
-                                    {{$ed->name}}
-                                @endif
+                                {!!$ed->name!!}
                             </option>
                         @endforeach
                     </select>
