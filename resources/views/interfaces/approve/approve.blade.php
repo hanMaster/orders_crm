@@ -39,7 +39,7 @@
                         {{$item->comment}}
                     </div>
                 </td>
-                <td>{{$item->ed->name}}</td>
+                <td>{!!$item->ed->name!!}</td>
                 <td>{{$item->quantity}}</td>
                 <td>{{$item->date_plan}}</td>
             </tr>

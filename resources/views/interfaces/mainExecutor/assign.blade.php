@@ -74,7 +74,7 @@
                                 @include('layouts.include.logs')
                             </div>
                         </td>
-                        <td>{{$item->ed->name}}</td>
+                        <td>{!!$item->ed->name!!}</td>
                         <td>{{$item->quantity}}</td>
                         <td>{{$item->date_plan}}</td>
                         <td>{{$item->date_fact}}</td>

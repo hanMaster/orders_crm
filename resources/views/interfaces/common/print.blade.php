@@ -20,7 +20,7 @@
             <tr @include('layouts.include.itemColors') >
                 <td>{{$item->idx}}</td>
                 <td>{{$item->order_item}}</td>
-                <td>{{$item->ed->name}}</td>
+                <td>{!!$item->ed->name!!}</td>
                 <td>{{$item->quantity}}</td>
                 <td>{{$item->date_plan}}</td>
                 <td>{{$item->comment}}</td>
