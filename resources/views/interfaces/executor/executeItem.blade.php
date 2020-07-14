@@ -49,7 +49,7 @@
                         class="form-control"
                         id="date_fact"
                         name="date_fact"
-                        value="{{old('date_fact') ?? date("d.m.Y", mktime(0, 0, 0, date('m'), date('d')+3, date('Y')))}}"
+                        value="{{old('date_fact') ?? \Carbon\Carbon::now()->format('d.m.Y')}}"
 
                     >
                 </div>

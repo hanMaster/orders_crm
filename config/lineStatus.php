@@ -10,5 +10,7 @@ return [
     'deliver_to_site'   => 7,
     'not_deliverable'   => 8,
     'done'              => 9,
+    'partial_done'      => 10,
+    'at_base'           => 11,
 ];
 

@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use App\BuildObject;
 use App\Ed;
 use App\Log;
-use App\Notifications\CommentAdded;
 use App\Order;
 use App\OrderComment;
 use App\OrderDetail;
 use App\Services\DayOffChecker;
 use App\Services\NotifSender;
-use App\User;
+use App\Services\Numerator;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use App\Services\Numerator;
 use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
@@ -55,13 +54,14 @@ class OrderController extends Controller
 
     public function addItemFromCreate(Request $request)
     {
+        $dt = Carbon::now()->add('day', 3)->endOfDay();
         $request->validate([
             'item' => 'required',
             'quantity' => 'required|numeric|gt:0',
             'ed_id' => 'required|numeric|gt:0',
             'attached_file' => 'mimes:pdf,jpg,jpeg,png|max:5120',
             'comment' => 'max:190',
-            'date_plan' => 'date|after:today'
+            'date_plan' => 'date|after:'.$dt
         ]);
 
         $filePath = null;
@@ -90,13 +90,14 @@ class OrderController extends Controller
 
     public function addItemFromEdit(Request $request, Order $order)
     {
+        $dt = Carbon::now()->add('day', 3)->endOfDay();
         $request->validate([
             'item' => 'required',
             'order_id' => 'required|numeric',
             'quantity' => 'required|gt:0',
             'attached_file' => 'mimes:pdf,jpg,jpeg,png|max:5120',
             'comment' => 'max:190',
-            'date_plan' => 'date|after:today'
+            'date_plan' => 'date|after:'.$dt
         ]);
 
         $filePath = null;
@@ -294,12 +295,13 @@ class OrderController extends Controller
 
     public function updateItem(Order $order, OrderDetail $item, Request $request)
     {
+        $dt = Carbon::now()->add('day', 3)->endOfDay();
         $request->validate([
             'item' => 'required',
             'quantity' => 'required|gt:0',
             'attached_file' => 'image|max:1000',
             'comment' => 'max:190',
-            'date_plan' => 'date|after:today'
+            'date_plan' => 'date|after:'.$dt
         ]);
 
         if ($request->hasFile('attached_file')) {

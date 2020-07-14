@@ -11,6 +11,7 @@
             <th style="width: 200px;">Наименование материала</th>
             <th style="width: 81px;">Ед. изм.</th>
             <th style="width: 75px;">Кол-во</th>
+            <th style="width: 75px;">Дата поставки</th>
             <th style="width: 200px;">Примечание</th>
         </tr>
         </thead>
@@ -21,6 +22,7 @@
                 <td>{{$item->order_item}}</td>
                 <td>{{$item->ed->name}}</td>
                 <td>{{$item->quantity}}</td>
+                <td>{{$item->date_plan}}</td>
                 <td>{{$item->comment}}</td>
             </tr>
         @endforeach

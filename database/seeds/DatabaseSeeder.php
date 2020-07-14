@@ -50,6 +50,8 @@ class DatabaseSeeder extends Seeder
         LineStatus::create(['status' => 'deliver_to_site', 'name' => 'Доставка на объект']);
         LineStatus::create(['status' => 'not_deliverable', 'name' => 'Поставка не возможна']);
         LineStatus::create(['status' => 'done', 'name' => 'Исполнено']);
+        LineStatus::create(['status' => 'partial_done', 'name' => 'Частично исполнено']);
+        LineStatus::create(['status' => 'at_base', 'name' => 'На базе']);
     }
 
     public function fillRoles()
