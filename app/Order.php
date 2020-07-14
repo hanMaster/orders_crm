@@ -22,11 +22,11 @@ class Order extends Model
     }
 
     public function items(){
-        return $this->hasMany(OrderDetail::class);
+        return $this->hasMany(OrderDetail::class)->orderBy('dt_plan', 'asc');
     }
 
     public function execItems(){
-        return $this->hasMany(OrderDetail::class)->where('executor_id', auth()->id());
+        return $this->hasMany(OrderDetail::class)->where('executor_id', auth()->id())->orderBy('dt_plan', 'asc');
     }
 
     public function comments(){

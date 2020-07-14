@@ -32,25 +32,26 @@ class OrderDetailObserver
         $cntRejected = $orderDetail->order->items->where('line_status_id', Config::get('lineStatus.not_deliverable'))->count();
         $cntDone = $orderDetail->order->items->whereIn('line_status_id', Config::get('lineStatus.done'))->count();
         $cntAll = $orderDetail->order->items->count();
+        $message = '';
         if ($cntAll == $cntDone) {
             $orderDetail->order->status_id = Config::get('status.exec_done');
             $message = "Заявка <strong>Исполнена</strong>";
-            if ($cntRejected == $cntAll) {
-                $orderDetail->order->status_id = Config::get('status.rejected');
-                $message = "Заявка <strong>Не исполнена</strong>";
-            } elseif ($cntAll == $cntDone + $cntRejected && $cntAll !== $cntDone) {
-                $orderDetail->order->status_id = Config::get('status.partial_done');
-                $message = "Заявка <strong>Частично исполнена</strong>";
-            }
-
-            $orderDetail->order->save();
-            Log::create([
-                'subject_id' => $orderDetail->order->id,
-                'user_id' => Auth::id(),
-                'message' => $message,
-                'isLine' => false
-            ]);
+        } elseif ($cntRejected == $cntAll) {
+            $orderDetail->order->status_id = Config::get('status.rejected');
+            $message = "Заявка <strong>Не исполнена</strong>";
+        } elseif ($cntAll == $cntDone + $cntRejected && $cntAll !== $cntDone) {
+            $orderDetail->order->status_id = Config::get('status.partial_done');
+            $message = "Заявка <strong>Частично исполнена</strong>";
         }
+
+        $orderDetail->order->save();
+        Log::create([
+            'subject_id' => $orderDetail->order->id,
+            'user_id' => Auth::id(),
+            'message' => $message,
+            'isLine' => false
+        ]);
+
 
         if ($orderDetail->line_status_id != $orderDetail->getOriginal('line_status_id')) {
             $ls = LineStatus::findOrFail($orderDetail->getOriginal('line_status_id'));

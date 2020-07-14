@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BuildObject;
 use App\Order;
 use App\OrderDetail;
+use App\Services\PatchDates;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\Config;
@@ -109,5 +110,9 @@ class HomeController extends Controller
                 return view('interfaces.admin.index', compact(['users', 'buildObjects']));
 
         }
+    }
+
+    public function patchDates (){
+        PatchDates::patch();
     }
 }

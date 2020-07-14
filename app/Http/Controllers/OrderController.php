@@ -75,6 +75,7 @@ class OrderController extends Controller
             'ed_id' => $request->ed_id,
             'quantity' => $request->quantity,
             'date_plan' => $request->date_plan,
+            'dt_plan' => Carbon::parse($request->date_plan)->format('Y.m.d'),
             'attached_file' => $filePath,
             'comment' => $request->comment
         ]);
@@ -111,6 +112,7 @@ class OrderController extends Controller
             'ed_id' => $request->ed_id,
             'quantity' => $request->quantity,
             'date_plan' => $request->date_plan,
+            'dt_plan' => Carbon::parse($request->date_plan)->format('Y.m.d'),
             'attached_file' => $filePath,
             'comment' => $request->comment
         ]);
@@ -314,6 +316,7 @@ class OrderController extends Controller
         $item->ed_id = $request->ed_id;
         $item->quantity = $request->quantity;
         $item->date_plan = $request->date_plan;
+        $item->dt_plan = Carbon::parse($request->date_plan)->format('Y.m.d');
         $item->comment = $request->comment;
         $item->save();
 

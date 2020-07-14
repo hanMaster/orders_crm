@@ -6,6 +6,7 @@ Route::post('/push','PushController@store')->middleware('auth');
 Route::get('/push','PushController@push')->name('push')->middleware('auth');
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('pd', 'HomeController@patchDates')->name('patchDates');
 
 Route::get('users/{user}/edit', 'UserController@edit')->middleware('auth');
 
