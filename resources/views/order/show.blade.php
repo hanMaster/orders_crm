@@ -119,7 +119,7 @@ $order->status_id == \Illuminate\Support\Facades\Config::get('status.editing')
 </form>
 @endif
 
-//Гаврилову можно редактировать заявку в статусе approved
+
 @if (auth()->user()->id == 18 && $order->status_id == \Illuminate\Support\Facades\Config::get('status.approved'))
 <a href="{{url('order/'.$order->id.'/starter-edit')}}" class="btn btn-primary">Редактировать заявку</a>
 @endif

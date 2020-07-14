@@ -9,6 +9,7 @@ use App\Notifications\CommentAdded;
 use App\Order;
 use App\OrderComment;
 use App\OrderDetail;
+use App\Services\DayOffChecker;
 use App\Services\NotifSender;
 use App\User;
 use Illuminate\Http\Request;
@@ -143,7 +144,9 @@ class OrderController extends Controller
             }
         }
         $order->save();
-        $order->created_at = $order->updated_at;
+
+        $order->created_at = DayOffChecker::getNextWorkDay($order->updated_at);
+
         $order->save();
 
         //Пронумеровали позиции в заявке
