@@ -92,7 +92,12 @@ class ExecutionController extends Controller
 
     public function itemsStatusChange(Order $order, Request $request)
     {
-        foreach ($order->execItems as $item) {
+        if (isset($request->items)) {
+            $items = $order->execItems->whereIn('idx', array_keys($request->items));
+        } else {
+            $items = $order->execItems;
+        }
+        foreach ($items as $item) {
             $item->line_status_id = $request->status_id;
             $item->save();
         }
