@@ -20,19 +20,12 @@
     <!-- Styles -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
           integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
+<!--    <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">-->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/print.css') }}" rel="stylesheet" media="print">
 
 </head>
-<body
-{{--    @guest--}}
-{{--    @else--}}
-{{--    @if (auth()->user()->email == "kokoreva.kfk@gmail.com")--}}
-{{--    style="background-image: url('{{asset('/bg/beauty.jpg')}}');"--}}
-{{--    @endif--}}
-{{--    @endguest--}}
->
+<body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">

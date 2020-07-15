@@ -54,7 +54,9 @@ class OrderController extends Controller
 
     public function addItemFromCreate(Request $request)
     {
-        $dt = Carbon::now()->add('day', 3)->endOfDay();
+        $dt_candidate = Carbon::now()->add('day', 3)->startOfDay()->add('hour', 7);
+        $dt = DayOffChecker::getNextWorkDay($dt_candidate)->sub('hour', 8);
+
         $request->validate([
             'item' => 'required',
             'quantity' => 'required|numeric|gt:0',
@@ -91,7 +93,9 @@ class OrderController extends Controller
 
     public function addItemFromEdit(Request $request, Order $order)
     {
-        $dt = Carbon::now()->add('day', 3)->endOfDay();
+        $dt_candidate = Carbon::now()->add('day', 3)->startOfDay()->add('hour', 7);
+        $dt = DayOffChecker::getNextWorkDay($dt_candidate)->sub('hour', 8);
+
         $request->validate([
             'item' => 'required',
             'order_id' => 'required|numeric',
@@ -297,11 +301,12 @@ class OrderController extends Controller
 
     public function updateItem(Order $order, OrderDetail $item, Request $request)
     {
-        $dt = Carbon::now()->add('day', 3)->endOfDay();
+        $dt_candidate = Carbon::now()->add('day', 3)->startOfDay()->add('hour', 7);
+        $dt = DayOffChecker::getNextWorkDay($dt_candidate)->sub('hour', 8);
         $request->validate([
             'item' => 'required',
             'quantity' => 'required|gt:0',
-            'attached_file' => 'image|max:1000',
+            'attached_file' => 'mimes:pdf,jpg,jpeg,png|max:5120',
             'comment' => 'max:190',
             'date_plan' => 'date|after:'.$dt
         ]);

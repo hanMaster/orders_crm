@@ -51,9 +51,15 @@ class HomeController extends Controller
 //Approver
             case Config::get('role.approve'):
 
-                $ordersToApprove = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', auth()->id()))
-                    ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
-                    ->orderBy('updated_at', 'desc')->get();
+                if (\auth()->id() == 7/* Шерстюк*/) {
+                    $ordersToApprove = Order::whereIn('object_id', BuildObject::select('id'))
+                        ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
+                        ->orderBy('updated_at', 'desc')->get();
+                } else {
+                    $ordersToApprove = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', auth()->id()))
+                        ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
+                        ->orderBy('updated_at', 'desc')->get();
+                }
 
                 if (\auth()->id() == 7/* Шерстюк*/) {
                     $ordersAll = Order::orderBy('updated_at', 'desc')->get();
@@ -112,7 +118,8 @@ class HomeController extends Controller
         }
     }
 
-    public function patchDates (){
+    public function patchDates()
+    {
         PatchDates::patch();
     }
 }

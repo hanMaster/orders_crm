@@ -10,7 +10,7 @@
                             <h2 class="mb-0">
                                 <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
                                         data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    В процессе создания
+                                    В процессе создания {{$preOrders->count() > 0 ? $preOrders->count() : ''}}
                                 </button>
                             </h2>
                         </div>
@@ -23,7 +23,7 @@
                                         @foreach($preOrders as $order)
                                             <li>
                                                 <a href="{{url("order/". $order->id )}}">
-                                                    {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}}
+                                                    {{$loop->iteration}}. {{$order->bo->name ?? ''}} - {{$order->name ?? ''}}
                                                     от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}}
                                                     - статус: {{$order->status->name}}
                                                 </a>
@@ -40,7 +40,7 @@
                                 <button class="btn btn-link btn-block text-left collapsed" type="button"
                                         data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
                                         aria-controls="collapseTwo">
-                                    Требуют назначения
+                                    Требуют назначения {{$startOrders->count() > 0 ? $startOrders->count() : ''}}
                                 </button>
                             </h2>
                         </div>
@@ -69,7 +69,7 @@
                                 <button class="btn btn-link btn-block text-left collapsed" type="button"
                                         data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
                                         aria-controls="collapseThree">
-                                    В процессе исполнения
+                                    В процессе исполнения {{$workOrders->count() > 0 ? $workOrders->count() : ''}}
                                 </button>
                             </h2>
                         </div>
@@ -98,7 +98,7 @@
                                 <button class="btn btn-link btn-block text-left collapsed" type="button"
                                         data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
                                         aria-controls="collapseFour">
-                                    Завершенные
+                                    Завершенные {{$doneOrders->count() > 0 ? $doneOrders->count() : ''}}
                                 </button>
                             </h2>
                         </div>

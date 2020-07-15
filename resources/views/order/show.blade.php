@@ -124,6 +124,7 @@ $order->status_id == \Illuminate\Support\Facades\Config::get('status.editing')
 <a href="{{url('order/'.$order->id.'/starter-edit')}}" class="btn btn-primary">Редактировать заявку</a>
 @endif
 
+<a href="{{url("print/".$order->id)}}" class="btn btn-primary mt-2">Печать заявки</a>
 
 @endsection
 
