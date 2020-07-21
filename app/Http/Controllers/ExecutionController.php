@@ -8,6 +8,7 @@ use App\Order;
 use App\OrderDetail;
 use App\Status;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -75,8 +76,13 @@ class ExecutionController extends Controller
 
         if ($item->line_status_id == Config::get('lineStatus.done') ||
             $item->line_status_id == Config::get('lineStatus.not_deliverable')) {
-            $item->date_fact = $request->date_fact;
-        }else{
+            if (isset($request->date_fact)) {
+                $item->date_fact = $request->date_fact;
+            } else {
+                $item->date_fact = Carbon::now()->format('d.m.Y');
+            }
+
+        } else {
             $item->date_fact = '';
         }
         $item->save();
@@ -92,12 +98,20 @@ class ExecutionController extends Controller
 
     public function itemsStatusChange(Order $order, Request $request)
     {
+
+
         if (isset($request->items)) {
             $items = $order->execItems->whereIn('idx', array_keys($request->items));
         } else {
             $items = $order->execItems;
         }
         foreach ($items as $item) {
+            if ($request->status_id == Config::get('lineStatus.done') ||
+                $request->status_id == Config::get('lineStatus.not_deliverable')) {
+                $item->date_fact = Carbon::now()->format('d.m.Y');
+            } else {
+                $item->date_fact = '';
+            }
             $item->line_status_id = $request->status_id;
             $item->save();
         }
