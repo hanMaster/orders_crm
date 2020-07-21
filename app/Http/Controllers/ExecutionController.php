@@ -61,7 +61,7 @@ class ExecutionController extends Controller
     public function executeItem(OrderDetail $item, Request $request)
     {
         $request->validate([
-            'date_fact' => 'date|after:yesterday'
+            'date_fact' => 'date'
         ]);
 
         if ($item->line_status_id != $request->status) {
