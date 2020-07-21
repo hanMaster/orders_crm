@@ -66,20 +66,20 @@ class ExecutionController extends Controller
 
         if ($item->line_status_id != $request->status) {
             $item->line_status_id = $request->status;
-            $item->save();
         }
 
         if ($item->comment != $request->comment) {
             $item->comment = $request->comment;
-            $item->save();
         }
 
 
         if ($item->line_status_id == Config::get('lineStatus.done') ||
             $item->line_status_id == Config::get('lineStatus.not_deliverable')) {
             $item->date_fact = $request->date_fact;
-            $item->save();
+        }else{
+            $item->date_fact = '';
         }
+        $item->save();
 
         return back();
     }
