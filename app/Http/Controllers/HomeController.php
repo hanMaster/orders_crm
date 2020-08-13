@@ -63,12 +63,30 @@ class HomeController extends Controller
 
                 if (\auth()->id() == 7/* Шерстюк*/) {
                     $ordersAll = Order::orderBy('updated_at', 'desc')->get();
+
+
+
                 } else {
                     $ordersAll = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', auth()->id()))
                         ->orderBy('updated_at', 'desc')->get();
                 }
 
-                return view('interfaces.approve.index', compact(['ordersToApprove', 'ordersAll']));
+                $workOrders = Order::whereIn('status_id', [
+                    Config::get('status.approved'),
+                    Config::get('status.executor'),
+                    Config::get('status.main_executor')])
+                    ->orderBy('updated_at', 'desc')->get();
+
+                $doneOrders = Order::whereIn('status_id', [
+                    Config::get('status.exec_done'),
+                    Config::get('status.partial_done'),
+                    Config::get('status.rejected')])
+                    ->orderBy('updated_at', 'desc')->get();
+
+                $bo = BuildObject::select('id', 'name')->get();
+
+
+                return view('interfaces.approve.index', compact(['ordersToApprove', 'ordersAll','workOrders', 'doneOrders', 'bo']));
 //Main executor
             case Config::get('role.main_executor'):
                 $preOrders = Order::whereIn('status_id', [
