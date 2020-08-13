@@ -69,8 +69,8 @@
                                         @foreach($workOrders as $order)
                                         @if ($order->object_id == $object->id)
                                         <li>
-                                            <a href="{{url(" order/". $order->id )}}">
-                                            {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}}
+                                            <a href="{{url("order/". $order->id )}}">
+                                            {{$loop->iteration}} . {{$order->name}}
                                             от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}}
                                             - статус: {{$order->status->name}}
                                             </a>
