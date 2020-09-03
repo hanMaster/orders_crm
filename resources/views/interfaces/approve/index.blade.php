@@ -12,7 +12,7 @@
                     <ul>
                         @foreach($ordersToApprove as $order)
                         <li>
-                            <a href="{{url(" approve/". $order->id)}}"
+                            <a href="{{url("approve/". $order->id)}}"
                             @if($order->status_id == \Illuminate\Support\Facades\Config::get('status.new'))
                             style="color: #1aa727;"
                             @elseif ($order->status_id == \Illuminate\Support\Facades\Config::get('status.approved'))
@@ -70,9 +70,8 @@
                                         @if ($order->object_id == $object->id)
                                         <li>
                                             <a href="{{url("order/". $order->id )}}">
-                                            {{$loop->iteration}} . {{$order->name}}
-                                            от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}}
-                                            - статус: {{$order->status->name}}
+                                            {{ \Carbon\Carbon::parse($order->created_at)->format('Y.m.d H:i')}} &nbsp;&nbsp; {{$order->name}}
+                                            --- {{$order->status->name}}
                                             </a>
                                         </li>
                                         @endif
@@ -108,7 +107,7 @@
                                 <ul>
                                     @foreach($ordersAll as $order)
                                     <li>
-                                        <a href="{{url(" order/". $order->id)}}"
+                                        <a href="{{url("order/". $order->id)}}"
                                         @if($order->status_id == \Illuminate\Support\Facades\Config::get('status.new'))
                                         style="color: #1aa727;"
                                         @elseif ($order->status_id ==
@@ -155,10 +154,11 @@
                                 <ul>
                                     @foreach($doneOrders as $order)
                                     <li>
-                                        <a href="{{url(" order/". $order->id )}}">
-                                        {{$loop->iteration}}. {{$order->bo->name}} - {{$order->name}}
-                                        от {{ \Carbon\Carbon::parse($order->created_at)->format('d.m.Y H:i')}}
-                                        - статус: {{$order->status->name}}
+                                        <a href="{{url("order/". $order->id )}}">
+
+                                        {{ \Carbon\Carbon::parse($order->created_at)->format('Y.m.d H:i')}} &nbsp;&nbsp; {{$order->bo->name}} --- {{$order->name}}
+                                        --- {{$order->status->name}}
+
                                         </a>
                                     </li>
                                     @endforeach

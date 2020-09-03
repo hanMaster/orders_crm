@@ -51,7 +51,7 @@ class HomeController extends Controller
 //Approver
             case Config::get('role.approve'):
 
-                if (\auth()->id() == 7/* Шерстюк*/) {
+                if (\auth()->id() == 7/* Шерстюк*/ || \auth()->id() == 12) {
                     $ordersToApprove = Order::whereIn('object_id', BuildObject::select('id'))
                         ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
                         ->orderBy('updated_at', 'desc')->get();

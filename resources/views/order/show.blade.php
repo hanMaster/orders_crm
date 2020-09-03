@@ -95,7 +95,7 @@
     <div class="tab-pane fade" id="reject" role="tabpanel" aria-labelledby="reject-tab">
 
         <h2 class="mt-3">Отмена заявки</h2>
-        <a class="btn btn-danger" onclick="reject({{$order->id}})" href="#">Отменить заявку</a>
+        <a class="btn btn-danger" onclick="reject({{$order['id']}})" href="#">Отменить заявку</a>
     </div>
     @endif
 
@@ -124,7 +124,7 @@ $order->status_id == \Illuminate\Support\Facades\Config::get('status.editing')
 <a href="{{url('order/'.$order->id.'/starter-edit')}}" class="btn btn-primary">Редактировать заявку</a>
 @endif
 
-<a href="{{url("print/".$order->id)}}" class="btn btn-primary mt-2">Печать заявки</a>
+<a href="{{url('print/'.$order->id)}}" class="btn btn-primary mt-2">Печать заявки</a>
 
 @endsection
 
