@@ -51,25 +51,16 @@ class HomeController extends Controller
 //Approver
             case Config::get('role.approve'):
 
-                if (\auth()->id() == 7/* Шерстюк*/ || \auth()->id() == 12) {
-                    $ordersToApprove = Order::whereIn('object_id', BuildObject::select('id'))
-                        ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
-                        ->orderBy('updated_at', 'desc')->get();
-                } else {
-                    $ordersToApprove = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', auth()->id()))
-                        ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
-                        ->orderBy('updated_at', 'desc')->get();
-                }
+                $ordersToApprove = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', auth()->id()))
+                    ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
+                    ->orderBy('updated_at', 'desc')->get();
 
-                if (\auth()->id() == 7/* Шерстюк*/) {
-                    $ordersAll = Order::orderBy('updated_at', 'desc')->get();
-
-
-
-                } else {
-                    $ordersAll = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', auth()->id()))
-                        ->orderBy('updated_at', 'desc')->get();
-                }
+                $coApproveOrders = Order::whereIn('status_id', [
+                    Config::get('status.new'),
+                    Config::get('status.approve_in_process'),
+                    Config::get('status.re_approve')])
+                    ->where('object_id', 9)
+                    ->orderBy('updated_at', 'desc')->get();
 
                 $workOrders = Order::whereIn('status_id', [
                     Config::get('status.approved'),
@@ -86,7 +77,7 @@ class HomeController extends Controller
                 $bo = BuildObject::select('id', 'name')->get();
 
 
-                return view('interfaces.approve.index', compact(['ordersToApprove', 'ordersAll','workOrders', 'doneOrders', 'bo']));
+                return view('interfaces.approve.index', compact(['ordersToApprove', 'coApproveOrders', 'workOrders', 'doneOrders', 'bo']));
 //Main executor
             case Config::get('role.main_executor'):
                 $preOrders = Order::whereIn('status_id', [
