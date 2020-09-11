@@ -33,6 +33,7 @@
                 </div>
             </div>
 
+            @if (Auth::user()->id != 7)
             <div class="card mt-5">
                 <div class="card-header">Панель совместного согласования</div>
 
@@ -61,6 +62,7 @@
                     @endif
                 </div>
             </div>
+            @endif
 
             <div class="card mt-5">
                 <div class="accordion" id="accordionApprove">
