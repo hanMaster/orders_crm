@@ -6,6 +6,12 @@ Route::post('/push','PushController@store')->middleware('auth');
 Route::get('/push','PushController@push')->name('push')->middleware('auth');
 
 Route::get('/', 'HomeController@index')->name('home');
+//Route::get('dashboard', 'HomeController@approveDashboard')->middleware('auth');
+Route::get('object/{object}', 'HomeController@objectList')->middleware('auth');
+Route::get('object/{object}/new', 'HomeController@objectListNew')->middleware('auth');
+Route::get('object/{object}/executing', 'HomeController@objectListWork')->middleware('auth');
+Route::get('object/{object}/done', 'HomeController@objectListDone')->middleware('auth');
+
 Route::get('pd', 'HomeController@patchDates')->name('patchDates');
 
 Route::get('users/{user}/edit', 'UserController@edit')->middleware('auth');

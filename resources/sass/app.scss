@@ -64,19 +64,44 @@ a {
 }
 
 @media (max-width: 400px) {
-    h3,h4{
+    h3, h4 {
         font-size: 1rem;
     }
-    //h4{
-    //    font-size: 0.6rem;
-    //}
 }
 
 @media (min-width: 401px) and (max-width: 570px) {
-    h3,h4{
+    h3, h4 {
         font-size: 1.1rem;
     }
-    //h4{
-    //    font-size: 0.6rem;
-    //}
+}
+
+.plates {
+    display: flex;
+    flex-wrap: wrap;
+
+    .plate {
+        width: 200px;
+        height: 170px;
+        border-radius: 5px;
+        background-color: #B1CFF4;
+        padding: 20px;
+        margin: 20px;
+        text-decoration: inherit;
+        color: rgba(0, 0, 0, .8);
+        position: relative;
+
+        &:hover {
+            background-color: #83b1f1;
+            box-shadow: 10px 11px 13px 1px rgba(0, 0, 0, 0.43);
+            color: #ffffff;
+        }
+
+        .orders-for-approve{
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 60px;
+            line-height: 60px;
+        }
+    }
 }

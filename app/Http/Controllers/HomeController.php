@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BuildObject;
 use App\Order;
 use App\OrderDetail;
+use App\Services\ActiveBuildObjects;
 use App\Services\PatchDates;
 use Illuminate\Support\Facades\Auth;
 use App\User;
@@ -50,34 +51,8 @@ class HomeController extends Controller
 
 //Approver
             case Config::get('role.approve'):
+                return $this->approveDashboard();
 
-                $ordersToApprove = Order::whereIn('object_id', BuildObject::select('id')->where('approve_id', auth()->id()))
-                    ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
-                    ->orderBy('updated_at', 'desc')->get();
-
-                $coApproveOrders = Order::whereIn('status_id', [
-                    Config::get('status.new'),
-                    Config::get('status.approve_in_process'),
-                    Config::get('status.re_approve')])
-                    ->where('object_id', 9)
-                    ->orderBy('updated_at', 'desc')->get();
-
-                $workOrders = Order::whereIn('status_id', [
-                    Config::get('status.approved'),
-                    Config::get('status.executor'),
-                    Config::get('status.main_executor')])
-                    ->orderBy('updated_at', 'desc')->get();
-
-                $doneOrders = Order::whereIn('status_id', [
-                    Config::get('status.exec_done'),
-                    Config::get('status.partial_done'),
-                    Config::get('status.rejected')])
-                    ->orderBy('updated_at', 'desc')->get();
-
-                $bo = BuildObject::select('id', 'name')->get();
-
-
-                return view('interfaces.approve.index', compact(['ordersToApprove', 'coApproveOrders', 'workOrders', 'doneOrders', 'bo']));
 //Main executor
             case Config::get('role.main_executor'):
                 $preOrders = Order::whereIn('status_id', [
@@ -149,8 +124,59 @@ class HomeController extends Controller
 
     public function approveDashboard()
     {
-        $bo = BuildObject::select('id', 'name')->get();
-        return view('interfaces.approve.dashboard', compact('bo'));
+        if(Auth::user()->role_id == Config::get('role.approve')){
+            $bo = ActiveBuildObjects::getActiveObjects();
+
+            foreach ($bo as $object){
+                $count = Order::where('object_id', $object->id)
+                    ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
+                    ->count();
+                $newCounters[$object->id] = $count;
+            }
+            return view('interfaces.approve.dashboard', compact(['bo', 'newCounters']));
+        }else{
+            return redirect('/');
+        }
     }
 
+    public function objectList(BuildObject $object)
+    {
+        $new = Order::where('object_id', $object->id)
+            ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
+            ->count();
+        $exec = Order::where('object_id', $object->id)
+            ->whereIn('status_id', [Config::get('status.approved'), Config::get('status.executor'), Config::get('status.main_executor')])
+            ->count();
+        $done = Order::where('object_id', $object->id)
+            ->whereIn('status_id', [Config::get('status.exec_done'), Config::get('status.partial_done'), Config::get('status.rejected')])
+            ->count();
+        return view('interfaces.common.object', compact(['object', 'new', 'exec', 'done']));
+    }
+    public function objectListNew(BuildObject $object)
+    {
+        $operation = 'approve';
+        $status = 'новые';
+        $orders = Order::where('object_id', $object->id)
+            ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
+            ->orderBy('updated_at', 'desc')->get();
+        return view('interfaces.common.objectList', compact(['object','orders', 'operation', 'status']));
+    }
+    public function objectListWork(BuildObject $object)
+    {
+        $operation = 'order';
+        $status = 'на исполнении';
+        $orders = Order::where('object_id', $object->id)
+            ->whereIn('status_id', [Config::get('status.approved'), Config::get('status.executor'), Config::get('status.main_executor')])
+            ->orderBy('updated_at', 'desc')->get();
+        return view('interfaces.common.objectList', compact(['object','orders', 'operation', 'status']));
+    }
+        public function objectListDone(BuildObject $object)
+    {
+        $operation = 'order';
+        $status = 'исполненные';
+        $orders = Order::where('object_id', $object->id)
+            ->whereIn('status_id', [Config::get('status.exec_done'), Config::get('status.partial_done'), Config::get('status.rejected')])
+            ->orderBy('updated_at', 'desc')->get();
+        return view('interfaces.common.objectList', compact(['object','orders', 'operation', 'status']));
+    }
 }
