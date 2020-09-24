@@ -118,6 +118,21 @@ class HomeController extends Controller
                     ->orderBy('updated_at', 'desc')->get();
 
                 return view('interfaces.executor.index', compact(['orders', 'ordersDone']));
+//Observer
+            case Config::get('role.observer'):
+                $orders = Order::whereIn('status_id', [
+                    Config::get('status.approved'),
+                    Config::get('status.executor'),
+                    Config::get('status.exec_done'),
+                    Config::get('status.partial_done'),
+                    Config::get('status.rejected'),
+                    Config::get('status.main_executor')])
+                    ->orderBy('updated_at', 'desc')->get();
+
+                $bo = BuildObject::select('id', 'name')->get();
+
+
+                return view('interfaces.observer.index', compact(['orders', 'bo']));
 //Admin
             case Config::get('role.admin'):
                 $users = User::all();
@@ -131,4 +146,11 @@ class HomeController extends Controller
     {
         PatchDates::patch();
     }
+
+    public function approveDashboard()
+    {
+        $bo = BuildObject::select('id', 'name')->get();
+        return view('interfaces.approve.dashboard', compact('bo'));
+    }
+
 }

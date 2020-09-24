@@ -1,9 +1,10 @@
 <?php
 
 return [
-  'starter'         => 1,
-  'approve'         => 2,
-  'main_executor'   => 3,
-  'executor'        => 4,
-  'admin'           => 5
+    'starter' => 1,
+    'approve' => 2,
+    'main_executor' => 3,
+    'executor' => 4,
+    'admin' => 5,
+    'observer' => 6
 ];
