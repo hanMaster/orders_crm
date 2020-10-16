@@ -37,7 +37,19 @@
                                     @foreach($orders as $order)
                                     @if ($order->object_id == $object->id)
                                     <li>
-                                        <a href="{{url('order/'. $order->id )}}">
+                                        <a href="{{url('order/'. $order->id )}}"
+                                           @if($order->status_id == \Illuminate\Support\Facades\Config::get('status.executor'))
+                                            style="color: crimson;"
+                                           @elseif($order->status_id == \Illuminate\Support\Facades\Config::get('status.exec_done'))
+                                            style="color: #1aa727;"
+                                            @elseif ($order->status_id == \Illuminate\Support\Facades\Config::get('status.partial_done'))
+                                            style="color: #a79721;"
+                                            @elseif ($order->status_id == \Illuminate\Support\Facades\Config::get('status.rejected'))
+                                            style="color: #111111;"
+
+                                            @endif
+
+                                        >
                                         {{ \Carbon\Carbon::parse($order->created_at)->format('Y.m.d H:i')}} &nbsp;&nbsp;
                                         {{$order->name}}
                                         --- {{$order->status->name}}
