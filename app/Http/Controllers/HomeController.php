@@ -33,7 +33,8 @@ class HomeController extends Controller
         switch (Auth::user()->role_id) {
 //Starter
             case Config::get('role.starter'):
-                $orders = Order::where('starter_id', auth()->id())
+                $objectId = BuildObject::select('id')->where('starter_id', auth()->id())->first();
+                $orders = Order::where('object_id', $objectId->id)
                     ->whereNotIn('status_id', [
                         Config::get('status.exec_done'),
                         Config::get('status.partial_done'),
