@@ -49,7 +49,7 @@
 
                                             @endif
 
-                                        >
+                                        >№{{$order->id}}&nbsp;
                                         {{ \Carbon\Carbon::parse($order->created_at)->format('Y.m.d H:i')}} &nbsp;&nbsp;
                                         {{$order->name}}
                                         --- {{$order->status->name}}

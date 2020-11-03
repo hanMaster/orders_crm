@@ -34,7 +34,13 @@ class HomeController extends Controller
 //Starter
             case Config::get('role.starter'):
                 $objectId = BuildObject::select('id')->where('starter_id', auth()->id())->first();
-                $orders = Order::where('object_id', $objectId->id)
+                if (isset($objectId)){
+                    $selectedId = $objectId->id;
+                } else {
+                    $selectedId = 0;
+                }
+
+                $orders = Order::where('object_id', $selectedId)
                     ->whereNotIn('status_id', [
                         Config::get('status.exec_done'),
                         Config::get('status.partial_done'),
