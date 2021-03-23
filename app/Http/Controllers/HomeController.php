@@ -34,7 +34,7 @@ class HomeController extends Controller
 //Starter
             case Config::get('role.starter'):
                 $objectId = BuildObject::select('id')->where('starter_id', auth()->id())->first();
-                if (isset($objectId)){
+                if (isset($objectId)) {
                     $selectedId = $objectId->id;
                 } else {
                     $selectedId = 0;
@@ -92,11 +92,19 @@ class HomeController extends Controller
             case Config::get('role.executor'):
 
                 $orders = Order::whereIn('id', OrderDetail::select('order_id')->where('executor_id', auth()->id()))
-                    ->whereNotIn('status_id', [Config::get('status.exec_done'), Config::get('status.partial_done'), Config::get('status.rejected')])
+                    ->whereNotIn('status_id', [
+                        Config::get('status.exec_done'),
+                        Config::get('status.partial_done'),
+                        Config::get('status.rejected')
+                    ])
                     ->orderBy('updated_at', 'desc')->get();
 
                 $ordersDone = Order::whereIn('id', OrderDetail::select('order_id')->where('executor_id', auth()->id()))
-                    ->whereIn('status_id', [Config::get('status.exec_done'), Config::get('status.partial_done'), Config::get('status.rejected')])
+                    ->whereIn('status_id', [
+                        Config::get('status.exec_done'),
+                        Config::get('status.partial_done'),
+                        Config::get('status.rejected')
+                    ])
                     ->orderBy('updated_at', 'desc')->get();
 
                 return view('interfaces.executor.index', compact(['orders', 'ordersDone']));
@@ -131,17 +139,21 @@ class HomeController extends Controller
 
     public function approveDashboard()
     {
-        if(Auth::user()->role_id == Config::get('role.approve')){
+        if (Auth::user()->role_id == Config::get('role.approve')) {
             $bo = ActiveBuildObjects::getActiveObjects();
 
-            foreach ($bo as $object){
+            foreach ($bo as $object) {
                 $count = Order::where('object_id', $object->id)
-                    ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
+                    ->whereIn('status_id', [
+                        Config::get('status.new'),
+                        Config::get('status.re_approve'),
+                        Config::get('status.approve_in_process')
+                    ])
                     ->count();
                 $newCounters[$object->id] = $count;
             }
             return view('interfaces.approve.dashboard', compact(['bo', 'newCounters']));
-        }else{
+        } else {
             return redirect('/');
         }
     }
@@ -149,41 +161,68 @@ class HomeController extends Controller
     public function objectList(BuildObject $object)
     {
         $new = Order::where('object_id', $object->id)
-            ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
+            ->whereIn('status_id', [
+                Config::get('status.new'),
+                Config::get('status.re_approve'),
+                Config::get('status.approve_in_process')
+            ])
             ->count();
         $exec = Order::where('object_id', $object->id)
-            ->whereIn('status_id', [Config::get('status.approved'), Config::get('status.executor'), Config::get('status.main_executor')])
+            ->whereIn('status_id', [
+                Config::get('status.approved'),
+                Config::get('status.executor'),
+                Config::get('status.main_executor')
+            ])
             ->count();
         $done = Order::where('object_id', $object->id)
-            ->whereIn('status_id', [Config::get('status.exec_done'), Config::get('status.partial_done'), Config::get('status.rejected')])
+            ->whereIn('status_id', [
+                Config::get('status.exec_done'),
+                Config::get('status.partial_done'),
+                Config::get('status.rejected')
+            ])
             ->count();
         return view('interfaces.common.object', compact(['object', 'new', 'exec', 'done']));
     }
+
     public function objectListNew(BuildObject $object)
     {
         $operation = 'approve';
         $status = 'новые';
         $orders = Order::where('object_id', $object->id)
-            ->whereIn('status_id', [Config::get('status.new'), Config::get('status.re_approve'), Config::get('status.approve_in_process')])
+            ->whereIn('status_id', [
+                Config::get('status.new'),
+                Config::get('status.re_approve'),
+                Config::get('status.approve_in_process')
+            ])
             ->orderBy('updated_at', 'desc')->get();
-        return view('interfaces.common.objectList', compact(['object','orders', 'operation', 'status']));
+        return view('interfaces.common.objectList', compact(['object', 'orders', 'operation', 'status']));
     }
+
     public function objectListWork(BuildObject $object)
     {
         $operation = 'order';
         $status = 'на исполнении';
         $orders = Order::where('object_id', $object->id)
-            ->whereIn('status_id', [Config::get('status.approved'), Config::get('status.executor'), Config::get('status.main_executor')])
+            ->whereIn('status_id', [
+                Config::get('status.approved'),
+                Config::get('status.executor'),
+                Config::get('status.main_executor')
+            ])
             ->orderBy('updated_at', 'desc')->get();
-        return view('interfaces.common.objectList', compact(['object','orders', 'operation', 'status']));
+        return view('interfaces.common.objectList', compact(['object', 'orders', 'operation', 'status']));
     }
-        public function objectListDone(BuildObject $object)
+
+    public function objectListDone(BuildObject $object)
     {
         $operation = 'order';
         $status = 'исполненные';
         $orders = Order::where('object_id', $object->id)
-            ->whereIn('status_id', [Config::get('status.exec_done'), Config::get('status.partial_done'), Config::get('status.rejected')])
+            ->whereIn('status_id', [
+                Config::get('status.exec_done'),
+                Config::get('status.partial_done'),
+                Config::get('status.rejected')
+            ])
             ->orderBy('updated_at', 'desc')->get();
-        return view('interfaces.common.objectList', compact(['object','orders', 'operation', 'status']));
+        return view('interfaces.common.objectList', compact(['object', 'orders', 'operation', 'status']));
     }
 }
