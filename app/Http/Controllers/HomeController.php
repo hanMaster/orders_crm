@@ -40,7 +40,8 @@ class HomeController extends Controller
                     $selectedId = 0;
                 }
 
-                $orders = Order::where('object_id', $selectedId)
+//                $orders = Order::where('object_id', $selectedId)
+                $orders = Order::where('starter_id', auth()->id())
                     ->whereNotIn('status_id', [
                         Config::get('status.exec_done'),
                         Config::get('status.partial_done'),
